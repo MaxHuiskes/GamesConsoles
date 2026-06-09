@@ -74,9 +74,11 @@ Open http://127.0.0.1:8000
 2. Add brands (Nintendo, Sony, etc.)
 3. Add consoles linked to a brand, then add versions per console
 4. Add games and link them to one or more consoles, then add versions per game
-5. Use **Invites** to invite new users
-6. Use **Friends** to copy your connect link; the other person opens it in a new tab while logged in to connect
-7. View a friend's collection read-only from **Friends**, or **Compare** to see shared and unique games/consoles
-8. Use **Pick a brand** to browse consoles per brand, then games per console
-9. Use **Pick console** to browse games per console, or **Pick random console**
-10. Use **Pick a game** for a random version from your own collection
+5. Open **Dashboard** for recently added items and per-brand stats
+6. Use **Invites** to invite new users
+7. Use **Friends** to copy your connect link; the other person opens it in a new tab while logged in to connect
+8. View a friend's collection read-only from **Friends**, or **Compare** to see shared and unique games/consoles
+9. Use **Pick a brand** to browse consoles per brand, then games per console
+10. Use **Pick console** to browse games per console, or **Pick random console**
+11. Use **Pick a game** for a random version from your own collection
+12. Use **What can I play?** to pick a random version filtered by console and/or condition

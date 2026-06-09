@@ -23,6 +23,7 @@
                 <div class="nav-menu" id="site-nav">
                     {% if app.user %}
                         <nav class="nav-links">
+                            <a href="{{ path('app_dashboard') }}">Dashboard</a>
                             <a href="{{ path('app_brand_index') }}">Brands</a>
                             <a href="{{ path('app_console_index') }}">Consoles</a>
                             <a href="{{ path('app_game_index') }}">Games</a>

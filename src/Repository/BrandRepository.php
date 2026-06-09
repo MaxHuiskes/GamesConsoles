@@ -44,4 +44,16 @@ class BrandRepository extends ServiceEntityRepository
     {
         return $this->count(['owner' => $owner]);
     }
+
+    /** @return list<Brand> */
+    public function findRecentByOwner(User $owner, int $limit): array
+    {
+        return $this->createQueryBuilder('b')
+            ->where('b.owner = :owner')
+            ->setParameter('owner', $owner)
+            ->orderBy('b.createdAt', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
 }

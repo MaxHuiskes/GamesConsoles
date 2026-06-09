@@ -87,4 +87,16 @@ class GameRepository extends ServiceEntityRepository
     {
         return $this->count(['owner' => $owner]);
     }
+
+    /** @return list<Game> */
+    public function findRecentByOwner(User $owner, int $limit): array
+    {
+        return $this->createQueryBuilder('g')
+            ->where('g.owner = :owner')
+            ->setParameter('owner', $owner)
+            ->orderBy('g.createdAt', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
 }

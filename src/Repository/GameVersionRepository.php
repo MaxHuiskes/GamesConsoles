@@ -30,6 +30,19 @@ class GameVersionRepository extends ServiceEntityRepository
             ->getSingleScalarResult();
     }
 
+    /** @return list<GameVersion> */
+    public function findRecentByOwner(User $owner, int $limit): array
+    {
+        return $this->createQueryBuilder('v')
+            ->join('v.game', 'g')
+            ->where('g.owner = :owner')
+            ->setParameter('owner', $owner)
+            ->orderBy('v.createdAt', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
+
     public function findRandomForOwner(User $owner): ?GameVersion
     {
         return $this->findRandomPlayableForOwner($owner, new PlayablePickerQuery());

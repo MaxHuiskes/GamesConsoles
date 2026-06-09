@@ -65,6 +65,19 @@ class ConsoleRepository extends ServiceEntityRepository
             ->getSingleScalarResult();
     }
 
+    /** @return list<Console> */
+    public function findRecentByOwner(User $owner, int $limit): array
+    {
+        return $this->createQueryBuilder('c')
+            ->join('c.brand', 'b')
+            ->where('b.owner = :owner')
+            ->setParameter('owner', $owner)
+            ->orderBy('c.createdAt', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
+
     public function findRandomForOwner(User $owner): ?Console
     {
         $count = $this->countByOwner($owner);
