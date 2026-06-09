@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Collection\Condition;
 use App\Entity\GameVersion;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -17,13 +18,6 @@ use Symfony\Component\Validator\Constraints\File;
 
 class GameVersionType extends AbstractType
 {
-    public const CONDITIONS = [
-        'Mint' => 'mint',
-        'Good' => 'good',
-        'Fair' => 'fair',
-        'Poor' => 'poor',
-    ];
-
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -33,7 +27,7 @@ class GameVersionType extends AbstractType
             ])
             ->add('condition', ChoiceType::class, [
                 'label' => 'Condition',
-                'choices' => self::CONDITIONS,
+                'choices' => Condition::CHOICES,
             ])
             ->add('description', TextareaType::class, [
                 'label' => 'Description',

@@ -14,8 +14,21 @@
         </div>
     </div>
 
+    {% include '_list_filters.html.twig' with {
+        action: path('app_game_index'),
+        show_brand: true,
+        show_tag: true,
+        show_condition: true,
+    } %}
+
     {% if games is empty %}
-        <div class="empty-state">No games yet. <a href="{{ path('app_game_new') }}">Add your first game</a>.</div>
+        <div class="empty-state">
+            {% if list_query.hasFilters %}
+                No games match your filters. <a href="{{ path('app_game_index') }}">Clear filters</a> or <a href="{{ path('app_game_new') }}">add a game</a>.
+            {% else %}
+                No games yet. <a href="{{ path('app_game_new') }}">Add your first game</a>.
+            {% endif %}
+        </div>
     {% else %}
         <div class="panel">
             <table>

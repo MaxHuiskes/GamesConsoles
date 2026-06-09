@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Brand;
 use App\Entity\User;
 use App\Form\BrandType;
+use App\Model\CollectionListQuery;
 use App\Repository\BrandRepository;
 use App\Security\Voter\CollectionVoter;
 use Doctrine\ORM\EntityManagerInterface;
@@ -17,13 +18,16 @@ use Symfony\Component\Routing\Attribute\Route;
 class BrandController extends AbstractController
 {
     #[Route('', name: 'app_brand_index', methods: ['GET'])]
-    public function index(BrandRepository $brandRepository): Response
+    public function index(Request $request, BrandRepository $brandRepository): Response
     {
         /** @var User $user */
         $user = $this->getUser();
 
+        $listQuery = CollectionListQuery::fromRequest($request, withExtendedSort: false);
+
         return $this->render('brand/index.html.twig', [
-            'brands' => $brandRepository->findByOwner($user),
+            'brands' => $brandRepository->findByOwner($user, $listQuery),
+            'list_query' => $listQuery,
         ]);
     }
 

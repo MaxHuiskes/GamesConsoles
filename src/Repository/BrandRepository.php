@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Brand;
 use App\Entity\User;
+use App\Model\CollectionListQuery;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -18,9 +19,25 @@ class BrandRepository extends ServiceEntityRepository
     }
 
     /** @return list<Brand> */
-    public function findByOwner(User $owner): array
+    public function findByOwner(User $owner, ?CollectionListQuery $query = null): array
     {
-        return $this->findBy(['owner' => $owner], ['name' => 'ASC']);
+        $qb = $this->createQueryBuilder('b')
+            ->where('b.owner = :owner')
+            ->setParameter('owner', $owner);
+
+        if (null === $query) {
+            return $qb->orderBy('b.name', 'ASC')->getQuery()->getResult();
+        }
+
+        if ('' !== $query->q) {
+            $qb->andWhere('LOWER(b.name) LIKE :list_q')
+                ->setParameter('list_q', '%'.mb_strtolower($query->q).'%');
+        }
+
+        $direction = 'desc' === $query->dir ? 'DESC' : 'ASC';
+        $qb->orderBy('b.name', $direction);
+
+        return $qb->getQuery()->getResult();
     }
 
     public function countByOwner(User $owner): int

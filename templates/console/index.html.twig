@@ -11,8 +11,20 @@
         <a href="{{ path('app_console_new') }}" class="btn btn-primary">Add console</a>
     </div>
 
+    {% include '_list_filters.html.twig' with {
+        action: path('app_console_index'),
+        show_brand: true,
+        show_condition: false,
+    } %}
+
     {% if consoles is empty %}
-        <div class="empty-state">No consoles yet. <a href="{{ path('app_console_new') }}">Add your first console</a>.</div>
+        <div class="empty-state">
+            {% if list_query.hasFilters %}
+                No consoles match your filters. <a href="{{ path('app_console_index') }}">Clear filters</a> or <a href="{{ path('app_console_new') }}">add a console</a>.
+            {% else %}
+                No consoles yet. <a href="{{ path('app_console_new') }}">Add your first console</a>.
+            {% endif %}
+        </div>
     {% else %}
         <div class="panel">
             <table>
