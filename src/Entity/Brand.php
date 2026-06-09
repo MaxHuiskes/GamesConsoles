@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Trait\CreatedAtTrait;
 use App\Repository\BrandRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -11,6 +12,8 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\UniqueConstraint(name: 'UNIQ_BRAND_OWNER_NAME', fields: ['owner', 'name'])]
 class Brand
 {
+    use CreatedAtTrait;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -30,6 +33,7 @@ class Brand
     public function __construct()
     {
         $this->consoles = new ArrayCollection();
+        $this->initCreatedAt();
     }
 
     public function getId(): ?int
