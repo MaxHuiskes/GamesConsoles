@@ -36,6 +36,8 @@
                         </nav>
                         <div class="nav-user">
                             <span class="nav-email">{{ app.user.userIdentifier }}</span>
+                            <a href="{{ path('app_profile') }}" class="btn btn-ghost">Profile</a>
+                            <a href="{{ path('app_collection') }}" class="btn btn-ghost">Import</a>
                             <a href="{{ path('app_logout') }}" class="btn btn-ghost">Logout</a>
                         </div>
                     {% else %}
@@ -46,6 +48,9 @@
                 </div>
             </div>
         </header>
+        {% if app.user %}
+            <a href="{{ path('app_quick_add') }}" class="fab-quick-add" aria-label="Quick add">+</a>
+        {% endif %}
         <main class="layout main">
             {% for label, messages in app.flashes %}
                 {% for message in messages %}

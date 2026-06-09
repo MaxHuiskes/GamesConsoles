@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Quick add - GamesConsoles{% endblock %}
+
+{% block body %}
+    <div class="page-header">
+        <h1>Quick add</h1>
+        <p class="page-subtitle">Minimal form for mobile — game or console in a few taps.</p>
+    </div>
+
+    <div class="form-panel quick-add-panel">
+        {{ form_start(form) }}
+            {{ form_row(form.type) }}
+            {{ form_row(form.name) }}
+            <div class="quick-add-console-fields">
+                {{ form_row(form.brand) }}
+                {{ form_row(form.console) }}
+            </div>
+            <div class="btn-group">
+                <button type="submit" class="btn btn-primary btn-large">Add</button>
+                <a href="{{ path('app_home') }}" class="btn btn-secondary">Cancel</a>
+            </div>
+        {{ form_end(form) }}
+    </div>
+
+    <script>
+        (function () {
+            const typeInputs = document.querySelectorAll('input[name="{{ form.type.vars.full_name }}"]');
+            const brandRow = document.getElementById('{{ form.brand.vars.id }}')?.closest('.mb-3, .form-group, div');
+            const consoleRow = document.getElementById('{{ form.console.vars.id }}')?.closest('.mb-3, .form-group, div');
+
+            const sync = () => {
+                const selected = document.querySelector('input[name="{{ form.type.vars.full_name }}"]:checked');
+                const isConsole = selected?.value === 'console';
+                if (brandRow) brandRow.style.display = isConsole ? '' : 'none';
+                if (consoleRow) consoleRow.style.display = isConsole ? 'none' : '';
+            };
+
+            typeInputs.forEach((input) => input.addEventListener('change', sync));
+            sync();
+        })();
+    </script>
+{% endblock %}

@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Brand;
 use App\Entity\Console;
 use App\Entity\User;
 use App\Model\CollectionListQuery;
@@ -48,6 +49,30 @@ class ConsoleRepository extends ServiceEntityRepository
             ->setParameter('owner', $owner)
             ->getQuery()
             ->getSingleScalarResult();
+    }
+
+    public function findOneByOwnerBrandAndNormalizedName(
+        User $owner,
+        Brand $brand,
+        string $name,
+        ?int $excludeId = null,
+    ): ?Console {
+        $qb = $this->createQueryBuilder('c')
+            ->join('c.brand', 'b')
+            ->where('b.owner = :owner')
+            ->andWhere('b = :brand')
+            ->andWhere('LOWER(c.name) = :name')
+            ->setParameter('owner', $owner)
+            ->setParameter('brand', $brand)
+            ->setParameter('name', mb_strtolower(trim($name)))
+            ->setMaxResults(1);
+
+        if (null !== $excludeId) {
+            $qb->andWhere('c.id != :excludeId')
+                ->setParameter('excludeId', $excludeId);
+        }
+
+        return $qb->getQuery()->getOneOrNullResult();
     }
 
     /** @return list<Console> */

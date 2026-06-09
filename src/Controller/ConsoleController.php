@@ -10,6 +10,7 @@ use App\Model\CollectionListQuery;
 use App\Repository\BrandRepository;
 use App\Repository\ConsoleRepository;
 use App\Security\Voter\CollectionVoter;
+use App\Service\DuplicateChecker;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -39,8 +40,11 @@ class ConsoleController extends AbstractController
     }
 
     #[Route('/new', name: 'app_console_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
-    {
+    public function new(
+        Request $request,
+        EntityManagerInterface $entityManager,
+        DuplicateChecker $duplicateChecker,
+    ): Response {
         /** @var User $user */
         $user = $this->getUser();
 
@@ -49,6 +53,24 @@ class ConsoleController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $brand = $console->getBrand();
+            if (null !== $brand) {
+                $duplicate = $duplicateChecker->findDuplicateConsole(
+                    $user,
+                    $brand,
+                    (string) $console->getName(),
+                    null,
+                    $request,
+                );
+                if (null !== $duplicate) {
+                    return $this->render('console/new.html.twig', [
+                        'console' => $console,
+                        'form' => $form,
+                        'duplicate' => $duplicate,
+                    ]);
+                }
+            }
+
             $entityManager->persist($console);
             $entityManager->flush();
 
@@ -72,8 +94,12 @@ class ConsoleController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_console_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Console $console, EntityManagerInterface $entityManager): Response
-    {
+    public function edit(
+        Request $request,
+        Console $console,
+        EntityManagerInterface $entityManager,
+        DuplicateChecker $duplicateChecker,
+    ): Response {
         $this->denyAccessUnlessGranted(CollectionVoter::EDIT, $console);
 
         /** @var User $user */
@@ -83,6 +109,24 @@ class ConsoleController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $brand = $console->getBrand();
+            if (null !== $brand) {
+                $duplicate = $duplicateChecker->findDuplicateConsole(
+                    $user,
+                    $brand,
+                    (string) $console->getName(),
+                    $console->getId(),
+                    $request,
+                );
+                if (null !== $duplicate) {
+                    return $this->render('console/edit.html.twig', [
+                        'console' => $console,
+                        'form' => $form,
+                        'duplicate' => $duplicate,
+                    ]);
+                }
+            }
+
             $entityManager->flush();
 
             return $this->redirectToRoute('app_console_show', ['id' => $console->getId()]);

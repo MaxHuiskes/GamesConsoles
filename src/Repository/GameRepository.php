@@ -89,6 +89,23 @@ class GameRepository extends ServiceEntityRepository
         return $this->count(['owner' => $owner]);
     }
 
+    public function findOneByOwnerAndNormalizedName(User $owner, string $name, ?int $excludeId = null): ?Game
+    {
+        $qb = $this->createQueryBuilder('g')
+            ->where('g.owner = :owner')
+            ->andWhere('LOWER(g.name) = :name')
+            ->setParameter('owner', $owner)
+            ->setParameter('name', mb_strtolower(trim($name)))
+            ->setMaxResults(1);
+
+        if (null !== $excludeId) {
+            $qb->andWhere('g.id != :excludeId')
+                ->setParameter('excludeId', $excludeId);
+        }
+
+        return $qb->getQuery()->getOneOrNullResult();
+    }
+
     /** @return list<Game> */
     public function findRecentByOwner(User $owner, int $limit): array
     {

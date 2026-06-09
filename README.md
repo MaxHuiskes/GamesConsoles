@@ -81,3 +81,7 @@ Open http://127.0.0.1:8000
 9. Use **Pick console** to browse games per console, or **Pick random console**
 10. Use **Pick a game** for a random version from your own collection
 11. Use **What can I play?** to pick a random version filtered by console and/or condition
+12. Use **Quick add** (+ button) for a minimal mobile add form
+13. Use **Import / Export** to backup or restore JSON/CSV (no photos or prices)
+14. Change your password under **Profile**
+15. Invites expire after 7 days by default (`app.invite_expiry_days` in `config/packages/app.yaml`, `0` = never)
