@@ -10,6 +10,10 @@
         <span class="version-card-badge">{{ version.condition }}</span>
         <h2 class="version-card-title">{{ version.name }}</h2>
         <dl class="version-card-meta">
+            {% if version.description|trim is not empty %}
+                <dt>Description</dt>
+                <dd class="version-card-description">{{ version.description|trim|nl2br }}</dd>
+            {% endif %}
             <dt>Prijs</dt>
             <dd>{% include '_prijs_reveal.html.twig' with {value: version.prijs} %}</dd>
         </dl>

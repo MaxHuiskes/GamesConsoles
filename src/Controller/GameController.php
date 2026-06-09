@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Game;
 use App\Entity\User;
 use App\Form\GameType;
+use App\Repository\ConsoleVersionRepository;
 use App\Repository\GameRepository;
 use App\Security\Voter\CollectionVoter;
 use Doctrine\ORM\EntityManagerInterface;
@@ -28,8 +29,11 @@ class GameController extends AbstractController
     }
 
     #[Route('/new', name: 'app_game_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
-    {
+    public function new(
+        Request $request,
+        EntityManagerInterface $entityManager,
+        ConsoleVersionRepository $consoleVersionRepository,
+    ): Response {
         /** @var User $user */
         $user = $this->getUser();
 
@@ -48,6 +52,7 @@ class GameController extends AbstractController
         return $this->render('game/new.html.twig', [
             'game' => $game,
             'form' => $form,
+            'consoleVersionConsoleMap' => $consoleVersionRepository->getConsoleIdMapForOwner($user),
         ]);
     }
 
@@ -62,8 +67,12 @@ class GameController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_game_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Game $game, EntityManagerInterface $entityManager): Response
-    {
+    public function edit(
+        Request $request,
+        Game $game,
+        EntityManagerInterface $entityManager,
+        ConsoleVersionRepository $consoleVersionRepository,
+    ): Response {
         $this->denyAccessUnlessGranted(CollectionVoter::EDIT, $game);
 
         /** @var User $user */
@@ -81,6 +90,7 @@ class GameController extends AbstractController
         return $this->render('game/edit.html.twig', [
             'game' => $game,
             'form' => $form,
+            'consoleVersionConsoleMap' => $consoleVersionRepository->getConsoleIdMapForOwner($user),
         ]);
     }
 

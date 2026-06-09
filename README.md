@@ -28,18 +28,21 @@ ConsoleVersion
 - console
 - name (e.g. Slim, Digital Edition, PAL)
 - condition
+- description (optional)
 - prijs (hidden field)
 - foto (blob in database)
 
 Game
 - owner (user)
 - consoles (multiple, optional)
+- console versions (multiple, optional)
 - name
 
 GameVersion
 - game
 - name (e.g. Physical, Digital, GOTY, PAL)
 - condition
+- description (optional)
 - prijs (hidden field)
 - foto (blob in database)
 

@@ -1,8 +1,42 @@
 {{ form_start(form) }}
-    {{ form_row(form.consoles) }}
     {{ form_row(form.name) }}
+    {{ form_row(form.consoles) }}
+    {{ form_row(form.consoleVersions) }}
     <div class="btn-group">
         <button type="submit" class="btn btn-primary">Save</button>
         <a href="{{ path('app_game_index') }}" class="btn btn-secondary">Cancel</a>
     </div>
 {{ form_end(form) }}
+
+{% if consoleVersionConsoleMap is defined %}
+    <script>
+        (function () {
+            const consolesSelect = document.getElementById('{{ form.consoles.vars.id }}');
+            const versionsSelect = document.getElementById('{{ form.consoleVersions.vars.id }}');
+            const versionConsoleMap = {{ consoleVersionConsoleMap|json_encode|raw }};
+
+            if (!consolesSelect || !versionsSelect) return;
+
+            const filterVersions = () => {
+                const selectedConsoleIds = new Set(
+                    Array.from(consolesSelect.selectedOptions).map((option) => option.value)
+                );
+
+                Array.from(versionsSelect.options).forEach((option) => {
+                    const consoleId = String(versionConsoleMap[option.value] ?? '');
+                    const visible = selectedConsoleIds.has(consoleId);
+
+                    option.hidden = !visible;
+                    option.disabled = !visible;
+
+                    if (!visible && option.selected) {
+                        option.selected = false;
+                    }
+                });
+            };
+
+            consolesSelect.addEventListener('change', filterVersions);
+            filterVersions();
+        })();
+    </script>
+{% endif %}

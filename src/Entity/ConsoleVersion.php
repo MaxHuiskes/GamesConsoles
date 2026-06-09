@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ConsoleVersionRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -31,6 +33,18 @@ class ConsoleVersion
 
     #[ORM\Column(type: Types::BLOB, nullable: true)]
     private mixed $foto = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $description = null;
+
+    /** @var Collection<int, Game> */
+    #[ORM\ManyToMany(targetEntity: Game::class, mappedBy: 'consoleVersions')]
+    private Collection $games;
+
+    public function __construct()
+    {
+        $this->games = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -100,6 +114,24 @@ class ConsoleVersion
     public function hasFoto(): bool
     {
         return $this->foto !== null;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): static
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /** @return Collection<int, Game> */
+    public function getGames(): Collection
+    {
+        return $this->games;
     }
 
     public function __toString(): string

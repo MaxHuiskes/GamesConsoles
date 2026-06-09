@@ -27,6 +27,11 @@ class Game
     #[ORM\JoinTable(name: 'game_console')]
     private Collection $consoles;
 
+    /** @var Collection<int, ConsoleVersion> */
+    #[ORM\ManyToMany(targetEntity: ConsoleVersion::class, inversedBy: 'games')]
+    #[ORM\JoinTable(name: 'game_console_version')]
+    private Collection $consoleVersions;
+
     /** @var Collection<int, GameVersion> */
     #[ORM\OneToMany(targetEntity: GameVersion::class, mappedBy: 'game', orphanRemoval: true)]
     private Collection $versions;
@@ -84,6 +89,28 @@ class Game
     public function removeConsole(Console $console): static
     {
         $this->consoles->removeElement($console);
+
+        return $this;
+    }
+
+    /** @return Collection<int, ConsoleVersion> */
+    public function getConsoleVersions(): Collection
+    {
+        return $this->consoleVersions;
+    }
+
+    public function addConsoleVersion(ConsoleVersion $consoleVersion): static
+    {
+        if (!$this->consoleVersions->contains($consoleVersion)) {
+            $this->consoleVersions->add($consoleVersion);
+        }
+
+        return $this;
+    }
+
+    public function removeConsoleVersion(ConsoleVersion $consoleVersion): static
+    {
+        $this->consoleVersions->removeElement($consoleVersion);
 
         return $this;
     }

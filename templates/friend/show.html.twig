@@ -69,6 +69,7 @@
                     <tr>
                         <th>Name</th>
                         <th>Consoles</th>
+                        <th>Console versions</th>
                         <th>Versions</th>
                     </tr>
                 </thead>
@@ -77,11 +78,26 @@
                         <tr>
                             <td><a href="{{ path('app_game_show', {id: game.id}) }}">{{ game.name }}</a></td>
                             <td>
-                                <div class="chip-list">
-                                    {% for console in game.consoles %}
-                                        <span class="chip">{{ console }} ({{ console.brand }})</span>
-                                    {% endfor %}
-                                </div>
+                                {% if game.consoles is empty %}
+                                    <span class="meta">—</span>
+                                {% else %}
+                                    <div class="chip-list">
+                                        {% for console in game.consoles %}
+                                            <span class="chip">{{ console }} ({{ console.brand }})</span>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if game.consoleVersions is empty %}
+                                    <span class="meta">—</span>
+                                {% else %}
+                                    <div class="chip-list">
+                                        {% for consoleVersion in game.consoleVersions %}
+                                            <span class="chip chip-version">{{ consoleVersion.console }} · {{ consoleVersion.name }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
                             </td>
                             <td>{{ game.versions|length }}</td>
                         </tr>

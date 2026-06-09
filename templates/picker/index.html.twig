@@ -21,6 +21,9 @@
                     {{ console.brand }} · {{ console }}{% if not loop.last %}<br>{% endif %}
                 {% endfor %}
             </p>
+            {% if version.description|trim is not empty %}
+                <p class="meta version-description">{{ version.description|trim|nl2br }}</p>
+            {% endif %}
             <a href="{{ path('app_picker') }}" class="btn btn-primary">Pick again</a>
         </div>
     {% else %}

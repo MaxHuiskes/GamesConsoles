@@ -7,14 +7,22 @@
         <div class="page-header" style="margin-bottom:0">
             <h1>{{ game.name }}</h1>
             <p class="page-subtitle">
-                {% if game.consoles is empty %}
-                    <span class="meta">No consoles linked</span>
-                {% else %}
+                {% if game.consoles is not empty %}
                     <span class="chip-list">
                         {% for console in game.consoles %}
                             <span class="chip">{{ console.brand }} · {{ console }}</span>
                         {% endfor %}
                     </span>
+                {% endif %}
+                {% if game.consoleVersions is not empty %}
+                    <span class="chip-list{% if game.consoles is not empty %} chip-list-spaced{% endif %}">
+                        {% for consoleVersion in game.consoleVersions %}
+                            <span class="chip chip-version">{{ consoleVersion.console.brand }} · {{ consoleVersion.console }} · {{ consoleVersion.name }}</span>
+                        {% endfor %}
+                    </span>
+                {% endif %}
+                {% if game.consoles is empty and game.consoleVersions is empty %}
+                    <span class="meta">No consoles linked</span>
                 {% endif %}
             </p>
         </div>

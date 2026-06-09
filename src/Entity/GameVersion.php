@@ -32,6 +32,9 @@ class GameVersion
     #[ORM\Column(type: Types::BLOB, nullable: true)]
     private mixed $foto = null;
 
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $description = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -100,6 +103,18 @@ class GameVersion
     public function hasFoto(): bool
     {
         return $this->foto !== null;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): static
+    {
+        $this->description = $description;
+
+        return $this;
     }
 
     public function __toString(): string
