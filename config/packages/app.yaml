@@ -1,0 +1,2 @@
+parameters:
+    app.invite_expiry_days: 7

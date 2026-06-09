@@ -24,6 +24,7 @@ class InviteController extends AbstractController
 
         return $this->render('invite/index.html.twig', [
             'invites' => $inviteRepository->findByInviter($user),
+            'inviteExpiryDays' => $inviteRepository->getExpiryDays(),
         ]);
     }
 

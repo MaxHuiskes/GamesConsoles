@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Import / Export - GamesConsoles{% endblock %}
+
+{% block body %}
+    <div class="page-header">
+        <h1>Import / Export</h1>
+        <p class="page-subtitle">Backup or restore your collection as JSON or CSV. Photos and prices are not included.</p>
+    </div>
+
+    <div class="action-grid">
+        <a href="{{ path('app_collection_export_json') }}" class="action-card">
+            <span class="action-card-icon">📦</span>
+            <strong>Export JSON</strong>
+            <span>Full collection structure</span>
+        </a>
+        <a href="{{ path('app_collection_export_csv') }}" class="action-card">
+            <span class="action-card-icon">📄</span>
+            <strong>Export CSV</strong>
+            <span>Spreadsheet-friendly rows</span>
+        </a>
+    </div>
+
+    <div class="form-panel" style="margin-top:1.5rem">
+        <h2 style="margin-top:0">Import</h2>
+        {{ form_start(form) }}
+            {{ form_row(form.file) }}
+            <div class="btn-group">
+                <button type="submit" class="btn btn-primary">Import file</button>
+            </div>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

@@ -1,0 +1,7 @@
+{% if duplicate is defined and duplicate %}
+    <div class="duplicate-warning">
+        <p>A matching item already exists{% if duplicate.name is defined %}: <strong>{{ duplicate.name }}</strong>{% else %}: <strong>{{ duplicate }}</strong>{% endif %}.</p>
+        <p class="meta">Submit again to save anyway.</p>
+        <input type="hidden" name="confirm_duplicate" value="1">
+    </div>
+{% endif %}

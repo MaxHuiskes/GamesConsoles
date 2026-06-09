@@ -87,6 +87,29 @@ class Invite
         return $this->usedAt !== null;
     }
 
+    public function isExpired(int $expiryDays): bool
+    {
+        if ($expiryDays <= 0) {
+            return false;
+        }
+
+        return $this->createdAt < new \DateTimeImmutable(sprintf('-%d days', $expiryDays));
+    }
+
+    public function isOpen(int $expiryDays): bool
+    {
+        return !$this->isUsed() && !$this->isExpired($expiryDays);
+    }
+
+    public function expiresAt(int $expiryDays): ?\DateTimeImmutable
+    {
+        if ($expiryDays <= 0) {
+            return null;
+        }
+
+        return $this->createdAt->modify(sprintf('+%d days', $expiryDays));
+    }
+
     public function getUsedBy(): ?User
     {
         return $this->usedBy;

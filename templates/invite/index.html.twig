@@ -6,7 +6,14 @@
     <div class="toolbar">
         <div class="page-header" style="margin-bottom:0">
             <h1>Invites</h1>
-            <p class="page-subtitle">Invite others to join your collection app.</p>
+            <p class="page-subtitle">
+            Invite others to join your collection app.
+            {% if inviteExpiryDays > 0 %}
+                Open invites expire after {{ inviteExpiryDays }} days.
+            {% else %}
+                Invites do not expire.
+            {% endif %}
+        </p>
         </div>
         <a href="{{ path('app_invite_new') }}" class="btn btn-primary">New invite</a>
     </div>
@@ -32,12 +39,21 @@
                             <td>
                                 {% if invite.used %}
                                     <span class="chip">Used by {{ invite.usedBy.email }}</span>
+                                {% elseif inviteExpiryDays > 0 and invite.isExpired(inviteExpiryDays) %}
+                                    <span class="chip">Expired</span>
                                 {% else %}
                                     <span class="chip">Open</span>
                                 {% endif %}
                             </td>
                             <td>
-                                {% if not invite.used %}
+                                {% if invite.used or inviteExpiryDays <= 0 %}
+                                    —
+                                {% else %}
+                                    {{ invite.expiresAt(inviteExpiryDays)|date('Y-m-d H:i') }}
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if invite.isOpen(inviteExpiryDays) %}
                                     <a href="{{ path('app_register_invite', {token: invite.token}) }}">Copy link</a>
                                 {% else %}
                                     —

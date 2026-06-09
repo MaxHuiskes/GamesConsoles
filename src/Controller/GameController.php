@@ -13,6 +13,7 @@ use App\Repository\ConsoleVersionRepository;
 use App\Repository\GameRepository;
 use App\Repository\TagRepository;
 use App\Security\Voter\CollectionVoter;
+use App\Service\DuplicateChecker;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -50,6 +51,7 @@ class GameController extends AbstractController
         EntityManagerInterface $entityManager,
         ConsoleVersionRepository $consoleVersionRepository,
         TagRepository $tagRepository,
+        DuplicateChecker $duplicateChecker,
     ): Response {
         /** @var User $user */
         $user = $this->getUser();
@@ -60,6 +62,16 @@ class GameController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $duplicate = $duplicateChecker->findDuplicateGame($user, (string) $game->getName(), null, $request);
+            if (null !== $duplicate) {
+                return $this->render('game/new.html.twig', [
+                    'game' => $game,
+                    'form' => $form,
+                    'consoleVersionConsoleMap' => $consoleVersionRepository->getConsoleIdMapForOwner($user),
+                    'duplicate' => $duplicate,
+                ]);
+            }
+
             $game->setOwner($user);
             $entityManager->persist($game);
             $entityManager->flush();
@@ -109,6 +121,7 @@ class GameController extends AbstractController
         EntityManagerInterface $entityManager,
         ConsoleVersionRepository $consoleVersionRepository,
         TagRepository $tagRepository,
+        DuplicateChecker $duplicateChecker,
     ): Response {
         $this->denyAccessUnlessGranted(CollectionVoter::EDIT, $game);
 
@@ -120,6 +133,21 @@ class GameController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $duplicate = $duplicateChecker->findDuplicateGame(
+                $user,
+                (string) $game->getName(),
+                $game->getId(),
+                $request,
+            );
+            if (null !== $duplicate) {
+                return $this->render('game/edit.html.twig', [
+                    'game' => $game,
+                    'form' => $form,
+                    'consoleVersionConsoleMap' => $consoleVersionRepository->getConsoleIdMapForOwner($user),
+                    'duplicate' => $duplicate,
+                ]);
+            }
+
             $entityManager->flush();
 
             return $this->redirectToRoute('app_game_show', ['id' => $game->getId()]);

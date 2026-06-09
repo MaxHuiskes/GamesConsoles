@@ -1,4 +1,5 @@
 {{ form_start(form) }}
+    {% include '_duplicate_warning.html.twig' %}
     {{ form_row(form.brand) }}
     {{ form_row(form.name) }}
     <div class="btn-group">
