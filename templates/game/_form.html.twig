@@ -2,6 +2,10 @@
     {{ form_row(form.name) }}
     {{ form_row(form.consoles) }}
     {{ form_row(form.consoleVersions) }}
+    <div class="tag-checkboxes">
+        {{ form_row(form.tags) }}
+        <p class="meta"><a href="{{ path('app_tag_index') }}">Manage tags</a></p>
+    </div>
     <div class="btn-group">
         <button type="submit" class="btn btn-primary">Save</button>
         <a href="{{ path('app_game_index') }}" class="btn btn-secondary">Cancel</a>

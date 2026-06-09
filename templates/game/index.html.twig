@@ -24,6 +24,7 @@
                         <th>Name</th>
                         <th>Consoles</th>
                         <th>Console versions</th>
+                        <th>Tags</th>
                         <th>Versions</th>
                         <th></th>
                     </tr>
@@ -50,6 +51,17 @@
                                     <div class="chip-list">
                                         {% for consoleVersion in game.consoleVersions %}
                                             <span class="chip chip-version">{{ consoleVersion.console }} · {{ consoleVersion.name }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if game.tags is empty %}
+                                    <span class="meta">—</span>
+                                {% else %}
+                                    <div class="chip-list">
+                                        {% for tag in game.tags %}
+                                            <span class="chip chip-tag">{{ tag.name }}</span>
                                         {% endfor %}
                                     </div>
                                 {% endif %}

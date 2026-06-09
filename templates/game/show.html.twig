@@ -21,7 +21,14 @@
                         {% endfor %}
                     </span>
                 {% endif %}
-                {% if game.consoles is empty and game.consoleVersions is empty %}
+                {% if game.tags is not empty %}
+                    <span class="chip-list{% if game.consoles is not empty or game.consoleVersions is not empty %} chip-list-spaced{% endif %}">
+                        {% for tag in game.tags %}
+                            <span class="chip chip-tag">{{ tag.name }}</span>
+                        {% endfor %}
+                    </span>
+                {% endif %}
+                {% if game.consoles is empty and game.consoleVersions is empty and game.tags is empty %}
                     <span class="meta">No consoles linked</span>
                 {% endif %}
             </p>

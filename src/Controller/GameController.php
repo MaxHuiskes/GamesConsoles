@@ -9,6 +9,7 @@ use App\Repository\BrandRepository;
 use App\Repository\ConsoleRepository;
 use App\Repository\ConsoleVersionRepository;
 use App\Repository\GameRepository;
+use App\Repository\TagRepository;
 use App\Security\Voter\CollectionVoter;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -20,10 +21,11 @@ use Symfony\Component\Routing\Attribute\Route;
 class GameController extends AbstractController
 {
     #[Route('', name: 'app_game_index', methods: ['GET'])]
-    public function index(GameRepository $gameRepository): Response
+    public function index(GameRepository $gameRepository, TagRepository $tagRepository): Response
     {
         /** @var User $user */
         $user = $this->getUser();
+        $tagRepository->ensureDefaultsForOwner($user);
 
         return $this->render('game/index.html.twig', [
             'games' => $gameRepository->findByOwner($user),
@@ -35,9 +37,11 @@ class GameController extends AbstractController
         Request $request,
         EntityManagerInterface $entityManager,
         ConsoleVersionRepository $consoleVersionRepository,
+        TagRepository $tagRepository,
     ): Response {
         /** @var User $user */
         $user = $this->getUser();
+        $tagRepository->ensureDefaultsForOwner($user);
 
         $game = new Game();
         $form = $this->createForm(GameType::class, $game, ['owner' => $user]);
@@ -92,11 +96,13 @@ class GameController extends AbstractController
         Game $game,
         EntityManagerInterface $entityManager,
         ConsoleVersionRepository $consoleVersionRepository,
+        TagRepository $tagRepository,
     ): Response {
         $this->denyAccessUnlessGranted(CollectionVoter::EDIT, $game);
 
         /** @var User $user */
         $user = $this->getUser();
+        $tagRepository->ensureDefaultsForOwner($user);
 
         $form = $this->createForm(GameType::class, $game, ['owner' => $user]);
         $form->handleRequest($request);
