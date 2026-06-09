@@ -35,10 +35,16 @@ ConsoleVersion
 - prijs (hidden field)
 - foto (blob in database)
 
+Tag
+- owner (user)
+- name (e.g. co-op, backlog, completed)
+- createdAt
+
 Game
 - owner (user)
 - consoles (multiple, optional)
 - console versions (multiple, optional)
+- tags (multiple, optional)
 - name
 - createdAt
 

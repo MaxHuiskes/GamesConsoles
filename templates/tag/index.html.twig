@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tags - GamesConsoles{% endblock %}
+
+{% block body %}
+    <div class="toolbar">
+        <div class="page-header" style="margin-bottom:0">
+            <h1>Tags</h1>
+            <p class="page-subtitle">Labels like co-op, backlog, and completed.</p>
+        </div>
+        <a href="{{ path('app_tag_new') }}" class="btn btn-primary">Add tag</a>
+    </div>
+
+    {% if tags is empty %}
+        <div class="empty-state">No tags yet.</div>
+    {% else %}
+        <div class="panel">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for tag in tags %}
+                        <tr>
+                            <td><span class="chip chip-tag">{{ tag.name }}</span></td>
+                            <td class="actions">
+                                <form method="post" action="{{ path('app_tag_delete', {id: tag.id}) }}" onsubmit="return confirm('Remove this tag from all games?');">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ tag.id) }}">
+                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+{% endblock %}

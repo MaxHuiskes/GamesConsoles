@@ -431,6 +431,28 @@ a:hover { color: #9ec0ff; }
     border-color: rgba(94, 234, 212, 0.25);
 }
 
+.chip-tag {
+    background: rgba(255, 193, 107, 0.14);
+    color: #ffc16b;
+    border-color: rgba(255, 193, 107, 0.3);
+}
+
+.tag-checkboxes .form-group,
+.tag-checkboxes fieldset {
+    margin-bottom: 0.5rem;
+}
+
+.tag-checkboxes ul,
+.tag-checkboxes .checkbox,
+.tag-checkboxes div:has(> input[type="checkbox"]) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
 .featured-picker .chip {
     margin-bottom: 1rem;
 }

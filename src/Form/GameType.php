@@ -5,9 +5,11 @@ namespace App\Form;
 use App\Entity\Console;
 use App\Entity\ConsoleVersion;
 use App\Entity\Game;
+use App\Entity\Tag;
 use App\Entity\User;
 use App\Repository\ConsoleRepository;
 use App\Repository\ConsoleVersionRepository;
+use App\Repository\TagRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -61,6 +63,18 @@ class GameType extends AbstractType
                     ->setParameter('owner', $owner)
                     ->orderBy('console.name', 'ASC')
                     ->addOrderBy('version.name', 'ASC'),
+            ])
+            ->add('tags', EntityType::class, [
+                'class' => Tag::class,
+                'choice_label' => 'name',
+                'label' => 'Tags',
+                'required' => false,
+                'multiple' => true,
+                'expanded' => true,
+                'query_builder' => fn (TagRepository $repo) => $repo->createQueryBuilder('tag')
+                    ->where('tag.owner = :owner')
+                    ->setParameter('owner', $owner)
+                    ->orderBy('tag.name', 'ASC'),
             ]);
 
         $builder->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $event): void {

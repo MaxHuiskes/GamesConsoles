@@ -35,6 +35,11 @@ class Game
     #[ORM\JoinTable(name: 'game_console_version')]
     private Collection $consoleVersions;
 
+    /** @var Collection<int, Tag> */
+    #[ORM\ManyToMany(targetEntity: Tag::class, inversedBy: 'games')]
+    #[ORM\JoinTable(name: 'game_tag')]
+    private Collection $tags;
+
     /** @var Collection<int, GameVersion> */
     #[ORM\OneToMany(targetEntity: GameVersion::class, mappedBy: 'game', orphanRemoval: true)]
     private Collection $versions;
@@ -43,6 +48,7 @@ class Game
     {
         $this->consoles = new ArrayCollection();
         $this->consoleVersions = new ArrayCollection();
+        $this->tags = new ArrayCollection();
         $this->versions = new ArrayCollection();
         $this->initCreatedAt();
     }
@@ -116,6 +122,28 @@ class Game
     public function removeConsoleVersion(ConsoleVersion $consoleVersion): static
     {
         $this->consoleVersions->removeElement($consoleVersion);
+
+        return $this;
+    }
+
+    /** @return Collection<int, Tag> */
+    public function getTags(): Collection
+    {
+        return $this->tags;
+    }
+
+    public function addTag(Tag $tag): static
+    {
+        if (!$this->tags->contains($tag)) {
+            $this->tags->add($tag);
+        }
+
+        return $this;
+    }
+
+    public function removeTag(Tag $tag): static
+    {
+        $this->tags->removeElement($tag);
 
         return $this;
     }
