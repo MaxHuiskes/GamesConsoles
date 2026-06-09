@@ -43,6 +43,20 @@ class ConsoleVersionRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    /** @return list<ConsoleVersion> */
+    public function findRecentByOwner(User $owner, int $limit): array
+    {
+        return $this->createQueryBuilder('version')
+            ->join('version.console', 'console')
+            ->join('console.brand', 'brand')
+            ->where('brand.owner = :owner')
+            ->setParameter('owner', $owner)
+            ->orderBy('version.createdAt', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
+
     /** @return array<int, int> version id => console id */
     public function getConsoleIdMapForOwner(User $owner): array
     {
