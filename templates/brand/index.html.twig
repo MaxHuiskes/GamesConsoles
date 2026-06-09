@@ -11,8 +11,19 @@
         <a href="{{ path('app_brand_new') }}" class="btn btn-primary">Add brand</a>
     </div>
 
+    {% include '_list_filters.html.twig' with {
+        action: path('app_brand_index'),
+        show_extended_sort: false,
+    } %}
+
     {% if brands is empty %}
-        <div class="empty-state">No brands yet. <a href="{{ path('app_brand_new') }}">Add Nintendo, Sony, etc.</a></div>
+        <div class="empty-state">
+            {% if list_query.hasFilters %}
+                No brands match your search. <a href="{{ path('app_brand_index') }}">Clear filters</a> or <a href="{{ path('app_brand_new') }}">add a brand</a>.
+            {% else %}
+                No brands yet. <a href="{{ path('app_brand_new') }}">Add Nintendo, Sony, etc.</a>.
+            {% endif %}
+        </div>
     {% else %}
         <div class="panel">
             <table>

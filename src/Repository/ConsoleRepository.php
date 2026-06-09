@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Console;
 use App\Entity\User;
+use App\Model\CollectionListQuery;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -12,21 +13,30 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class ConsoleRepository extends ServiceEntityRepository
 {
+    use ListQueryBuilderTrait;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Console::class);
     }
 
     /** @return list<Console> */
-    public function findByOwner(User $owner): array
+    public function findByOwner(User $owner, ?CollectionListQuery $query = null): array
     {
-        return $this->createQueryBuilder('c')
+        $qb = $this->createQueryBuilder('c')
             ->join('c.brand', 'b')
             ->where('b.owner = :owner')
-            ->setParameter('owner', $owner)
-            ->orderBy('c.name', 'ASC')
-            ->getQuery()
-            ->getResult();
+            ->setParameter('owner', $owner);
+
+        if (null === $query) {
+            return $qb->orderBy('c.name', 'ASC')->getQuery()->getResult();
+        }
+
+        $this->applyNameFilter($qb, 'c', $query);
+        $this->applyBrandFilter($qb, 'b', $query);
+        $this->applySort($qb, 'c', $query, 'sort_cv');
+
+        return $qb->getQuery()->getResult();
     }
 
     public function countByOwner(User $owner): int

@@ -5,6 +5,9 @@ namespace App\Controller;
 use App\Entity\Console;
 use App\Entity\User;
 use App\Form\ConsoleType;
+use App\Collection\Condition;
+use App\Model\CollectionListQuery;
+use App\Repository\BrandRepository;
 use App\Repository\ConsoleRepository;
 use App\Security\Voter\CollectionVoter;
 use Doctrine\ORM\EntityManagerInterface;
@@ -17,13 +20,21 @@ use Symfony\Component\Routing\Attribute\Route;
 class ConsoleController extends AbstractController
 {
     #[Route('', name: 'app_console_index', methods: ['GET'])]
-    public function index(ConsoleRepository $consoleRepository): Response
-    {
+    public function index(
+        Request $request,
+        ConsoleRepository $consoleRepository,
+        BrandRepository $brandRepository,
+    ): Response {
         /** @var User $user */
         $user = $this->getUser();
 
+        $listQuery = CollectionListQuery::fromRequest($request, withCondition: false);
+
         return $this->render('console/index.html.twig', [
-            'consoles' => $consoleRepository->findByOwner($user),
+            'consoles' => $consoleRepository->findByOwner($user, $listQuery),
+            'list_query' => $listQuery,
+            'brands' => $brandRepository->findByOwner($user),
+            'condition_choices' => Condition::CHOICES,
         ]);
     }
 

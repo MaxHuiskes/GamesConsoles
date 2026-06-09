@@ -1,0 +1,70 @@
+<form method="get" action="{{ action }}" class="list-filters">
+    <div class="list-filters-fields">
+        <label class="list-filter">
+            <span class="list-filter-label">Search</span>
+            <input type="search" name="q" value="{{ list_query.q }}" placeholder="Name…" autocomplete="off">
+        </label>
+
+        {% if show_brand|default(false) and brands is defined %}
+            <label class="list-filter">
+                <span class="list-filter-label">Brand</span>
+                <select name="brand">
+                    <option value="">All brands</option>
+                    {% for brand in brands %}
+                        <option value="{{ brand.id }}"{% if list_query.brandId == brand.id %} selected{% endif %}>{{ brand.name }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+        {% endif %}
+
+        {% if show_tag|default(false) and tags is defined %}
+            <label class="list-filter">
+                <span class="list-filter-label">Tag</span>
+                <select name="tag">
+                    <option value="">All tags</option>
+                    {% for tag in tags %}
+                        <option value="{{ tag.id }}"{% if list_query.tagId == tag.id %} selected{% endif %}>{{ tag.name }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+        {% endif %}
+
+        {% if show_condition|default(false) %}
+            <label class="list-filter">
+                <span class="list-filter-label">Condition</span>
+                <select name="condition">
+                    <option value="">Any condition</option>
+                    {% for label, value in condition_choices %}
+                        <option value="{{ value }}"{% if list_query.condition == value %} selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+        {% endif %}
+
+        <label class="list-filter">
+            <span class="list-filter-label">Sort</span>
+            <select name="sort">
+                <option value="name"{% if list_query.sort == 'name' %} selected{% endif %}>Name</option>
+                {% if show_extended_sort|default(true) %}
+                    <option value="prijs"{% if list_query.sort == 'prijs' %} selected{% endif %}>Prijs</option>
+                    <option value="condition"{% if list_query.sort == 'condition' %} selected{% endif %}>Condition</option>
+                {% endif %}
+            </select>
+        </label>
+
+        <label class="list-filter">
+            <span class="list-filter-label">Order</span>
+            <select name="dir">
+                <option value="asc"{% if list_query.dir == 'asc' %} selected{% endif %}>Ascending</option>
+                <option value="desc"{% if list_query.dir == 'desc' %} selected{% endif %}>Descending</option>
+            </select>
+        </label>
+    </div>
+
+    <div class="list-filters-actions">
+        <button type="submit" class="btn btn-primary">Apply</button>
+        {% if list_query.hasFilters or not list_query.isDefaultSort %}
+            <a href="{{ action }}" class="btn btn-ghost">Clear</a>
+        {% endif %}
+    </div>
+</form>

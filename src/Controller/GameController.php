@@ -5,6 +5,9 @@ namespace App\Controller;
 use App\Entity\Game;
 use App\Entity\User;
 use App\Form\GameType;
+use App\Collection\Condition;
+use App\Model\CollectionListQuery;
+use App\Repository\BrandRepository;
 use App\Repository\ConsoleVersionRepository;
 use App\Repository\GameRepository;
 use App\Repository\TagRepository;
@@ -19,14 +22,24 @@ use Symfony\Component\Routing\Attribute\Route;
 class GameController extends AbstractController
 {
     #[Route('', name: 'app_game_index', methods: ['GET'])]
-    public function index(GameRepository $gameRepository, TagRepository $tagRepository): Response
-    {
+    public function index(
+        Request $request,
+        GameRepository $gameRepository,
+        BrandRepository $brandRepository,
+        TagRepository $tagRepository,
+    ): Response {
         /** @var User $user */
         $user = $this->getUser();
         $tagRepository->ensureDefaultsForOwner($user);
 
+        $listQuery = CollectionListQuery::fromRequest($request, withTag: true, withCondition: true);
+
         return $this->render('game/index.html.twig', [
-            'games' => $gameRepository->findByOwner($user),
+            'games' => $gameRepository->findByOwner($user, $listQuery),
+            'list_query' => $listQuery,
+            'brands' => $brandRepository->findByOwner($user),
+            'tags' => $tagRepository->findByOwner($user),
+            'condition_choices' => Condition::CHOICES,
         ]);
     }
 

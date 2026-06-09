@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Console;
 use App\Entity\Game;
 use App\Entity\User;
+use App\Model\CollectionListQuery;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -13,20 +14,58 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class GameRepository extends ServiceEntityRepository
 {
+    use ListQueryBuilderTrait;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Game::class);
     }
 
     /** @return list<Game> */
-    public function findByOwner(User $owner): array
+    public function findByOwner(User $owner, ?CollectionListQuery $query = null): array
     {
-        return $this->createQueryBuilder('g')
+        $qb = $this->createQueryBuilder('g')
             ->where('g.owner = :owner')
-            ->setParameter('owner', $owner)
-            ->orderBy('g.name', 'ASC')
-            ->getQuery()
-            ->getResult();
+            ->setParameter('owner', $owner);
+
+        if (null === $query) {
+            return $qb->orderBy('g.name', 'ASC')->getQuery()->getResult();
+        }
+
+        $this->applyNameFilter($qb, 'g', $query);
+
+        $needsDistinct = false;
+
+        if (null !== $query->brandId) {
+            $qb->join('g.consoles', 'list_c')
+                ->join('list_c.brand', 'list_b')
+                ->andWhere('list_b.owner = :owner');
+            $this->applyBrandFilter($qb, 'list_b', $query);
+            $needsDistinct = true;
+        }
+
+        if (null !== $query->tagId) {
+            $qb->join('g.tags', 'list_t')
+                ->andWhere('list_t.owner = :owner')
+                ->andWhere('list_t.id = :list_tag')
+                ->setParameter('list_tag', $query->tagId);
+            $needsDistinct = true;
+        }
+
+        if (null !== $query->condition) {
+            $qb->join('g.versions', 'list_gv')
+                ->andWhere('list_gv.condition = :list_condition')
+                ->setParameter('list_condition', $query->condition);
+            $needsDistinct = true;
+        }
+
+        if ($needsDistinct) {
+            $qb->distinct();
+        }
+
+        $this->applySort($qb, 'g', $query, 'sort_gv');
+
+        return $qb->getQuery()->getResult();
     }
 
     /** @return list<Game> */

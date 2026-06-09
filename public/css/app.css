@@ -198,6 +198,67 @@ a:hover { color: #9ec0ff; }
     flex-wrap: wrap;
 }
 
+.list-filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+    padding: 1rem 1.15rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+
+.list-filters-fields {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1rem;
+    flex: 1;
+    min-width: min(100%, 16rem);
+}
+
+.list-filter {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    min-width: 8.5rem;
+}
+
+.list-filter-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+
+.list-filter input,
+.list-filter select {
+    width: 100%;
+    min-width: 8.5rem;
+    padding: 0.55rem 0.7rem;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    background: var(--bg-accent);
+    color: var(--text);
+    font: inherit;
+}
+
+.list-filter input:focus,
+.list-filter select:focus {
+    outline: 2px solid var(--accent-soft);
+    border-color: var(--accent);
+}
+
+.list-filters-actions {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
 .toolbar .actions,
 .btn-group {
     display: flex;
@@ -844,6 +905,25 @@ body.nav-menu-open {
     .toolbar {
         flex-direction: column;
         align-items: stretch;
+    }
+
+    .list-filters {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .list-filter {
+        min-width: 0;
+        width: 100%;
+    }
+
+    .list-filters-actions {
+        width: 100%;
+    }
+
+    .list-filters-actions .btn {
+        flex: 1;
+        justify-content: center;
     }
 
     .toolbar .actions,
