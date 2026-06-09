@@ -6,6 +6,7 @@ use App\Entity\Game;
 use App\Entity\User;
 use App\Form\GameType;
 use App\Collection\Condition;
+use App\Http\RequestQuery;
 use App\Model\CollectionListQuery;
 use App\Repository\BrandRepository;
 use App\Repository\ConsoleRepository;
@@ -96,14 +97,14 @@ class GameController extends AbstractController
         $this->denyAccessUnlessGranted(CollectionVoter::VIEW, $game);
 
         $pickConsole = null;
-        $consoleId = $request->query->getInt('console');
-        if ($consoleId > 0) {
+        $consoleId = RequestQuery::optionalPositiveInt($request, 'console');
+        if (null !== $consoleId) {
             $pickConsole = $consoleRepository->find($consoleId);
         }
 
         $pickBrand = null;
-        $brandId = $request->query->getInt('brand');
-        if ($brandId > 0) {
+        $brandId = RequestQuery::optionalPositiveInt($request, 'brand');
+        if (null !== $brandId) {
             $pickBrand = $brandRepository->find($brandId);
         }
 

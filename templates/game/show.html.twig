@@ -65,6 +65,8 @@
         {% endif %}
     {% elseif pickConsole is defined and pickConsole %}
         <a href="{{ path('app_console_picker_games', {id: pickConsole.id, brand: pickBrand.id|default(null)}) }}" class="back-link">← Back to {{ pickConsole.name }}</a>
+    {% elseif pickBrand is defined and pickBrand %}
+        <a href="{{ path('app_brand_picker_consoles', {id: pickBrand.id}) }}" class="back-link">← Back to {{ pickBrand.name }}</a>
     {% else %}
         <a href="{{ path('app_game_index') }}" class="back-link">← Back to games</a>
     {% endif %}

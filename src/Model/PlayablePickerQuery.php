@@ -3,6 +3,7 @@
 namespace App\Model;
 
 use App\Collection\Condition;
+use App\Http\RequestQuery;
 use Symfony\Component\HttpFoundation\Request;
 
 final class PlayablePickerQuery
@@ -38,8 +39,7 @@ final class PlayablePickerQuery
 
     public static function fromRequest(Request $request): self
     {
-        $consoleId = $request->query->getInt('console');
-        $consoleId = $consoleId > 0 ? $consoleId : null;
+        $consoleId = RequestQuery::optionalPositiveInt($request, 'console');
 
         $rawCondition = $request->query->getString('condition');
         $condition = Condition::isValid($rawCondition) ? $rawCondition : null;

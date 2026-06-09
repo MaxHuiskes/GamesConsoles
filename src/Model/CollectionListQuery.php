@@ -3,6 +3,7 @@
 namespace App\Model;
 
 use App\Collection\Condition;
+use App\Http\RequestQuery;
 use Symfony\Component\HttpFoundation\Request;
 
 final class CollectionListQuery
@@ -67,13 +68,11 @@ final class CollectionListQuery
     ): self {
         $q = trim($request->query->getString('q'));
 
-        $brandId = $request->query->getInt('brand');
-        $brandId = $brandId > 0 ? $brandId : null;
+        $brandId = RequestQuery::optionalPositiveInt($request, 'brand');
 
         $tagId = null;
         if ($withTag) {
-            $tagId = $request->query->getInt('tag');
-            $tagId = $tagId > 0 ? $tagId : null;
+            $tagId = RequestQuery::optionalPositiveInt($request, 'tag');
         }
 
         $condition = null;

@@ -11,8 +11,9 @@ use App\Repository\ConsoleVersionRepository;
 use App\Repository\FriendshipRepository;
 use App\Repository\GameRepository;
 use App\Repository\GameVersionRepository;
-use App\Service\CollectionCompareService;
+use App\Http\RequestQuery;
 use App\Security\Voter\CollectionVoter;
+use App\Service\CollectionCompareService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -34,6 +35,7 @@ class FriendController extends AbstractController
             throw $this->createAccessDeniedException();
         }
     }
+
     #[Route('', name: 'app_friend_index', methods: ['GET'])]
     public function index(
         FriendshipRepository $friendshipRepository,
@@ -66,18 +68,14 @@ class FriendController extends AbstractController
     ): Response {
         /** @var User $user */
         $user = $this->getUser();
-
-        if ($friend->getId() === $user->getId()) {
-            return $this->redirectToRoute('app_home');
-        }
-
-        if (!$friendshipRepository->areFriends($user, $friend)) {
-            throw $this->createAccessDeniedException();
-        }
+        $this->assertFriendAccess($user, $friend, $friendshipRepository);
 
         return $this->render('friend/compare.html.twig', [
             'friend' => $friend,
             'comparison' => $collectionCompareService->compare($user, $friend),
+        ]);
+    }
+
     #[Route('/{id}/pick-console/{consoleId}', name: 'app_friend_pick_console_games', methods: ['GET'])]
     public function pickConsoleGames(
         User $friend,
@@ -119,8 +117,8 @@ class FriendController extends AbstractController
         }
 
         $pickConsole = null;
-        $consoleId = $request->query->getInt('console');
-        if ($consoleId > 0) {
+        $consoleId = RequestQuery::optionalPositiveInt($request, 'console');
+        if (null !== $consoleId) {
             $pickConsole = $consoleRepository->find($consoleId);
         }
 

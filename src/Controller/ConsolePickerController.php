@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Console;
 use App\Entity\User;
+use App\Http\RequestQuery;
 use App\Repository\BrandRepository;
 use App\Repository\ConsoleRepository;
 use App\Repository\GameRepository;
@@ -54,8 +55,8 @@ class ConsolePickerController extends AbstractController
         $user = $this->getUser();
 
         $pickBrand = null;
-        $brandId = $request->query->getInt('brand');
-        if ($brandId > 0) {
+        $brandId = RequestQuery::optionalPositiveInt($request, 'brand');
+        if (null !== $brandId) {
             $pickBrand = $brandRepository->find($brandId);
         }
 
