@@ -76,7 +76,7 @@ Open http://127.0.0.1:8000
 4. Add games and link them to one or more consoles, then add versions per game
 5. Use **Invites** to invite new users
 6. Use **Friends** to copy your connect link; the other person opens it in a new tab while logged in to connect
-7. View a friend's collection read-only from **Friends**
+7. View a friend's collection read-only from **Friends**, or **Compare** to see shared and unique games/consoles
 8. Use **Pick console** to browse games per console, or **Pick random console**
 9. Use **Pick a game** for a random version from your own collection
 10. Use **What can I play?** to pick a random version filtered by console and/or condition

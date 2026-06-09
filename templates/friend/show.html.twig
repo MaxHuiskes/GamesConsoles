@@ -107,5 +107,8 @@
         </div>
     {% endif %}
 
-    <a href="{{ path('app_friend_index') }}" class="back-link">← Back to friends</a>
+    <div class="btn-group">
+        <a href="{{ path('app_friend_compare', {id: friend.id}) }}" class="btn btn-primary">Compare collections</a>
+        <a href="{{ path('app_friend_index') }}" class="btn btn-ghost">← Back to friends</a>
+    </div>
 {% endblock %}

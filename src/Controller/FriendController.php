@@ -9,6 +9,7 @@ use App\Repository\ConsoleVersionRepository;
 use App\Repository\FriendshipRepository;
 use App\Repository\GameRepository;
 use App\Repository\GameVersionRepository;
+use App\Service\CollectionCompareService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -39,6 +40,29 @@ class FriendController extends AbstractController
         return $this->render('friend/index.html.twig', [
             'friends' => $friendshipRepository->findFriends($user),
             'connectUrl' => $connectUrl,
+        ]);
+    }
+
+    #[Route('/{id}/compare', name: 'app_friend_compare', methods: ['GET'])]
+    public function compare(
+        User $friend,
+        FriendshipRepository $friendshipRepository,
+        CollectionCompareService $collectionCompareService,
+    ): Response {
+        /** @var User $user */
+        $user = $this->getUser();
+
+        if ($friend->getId() === $user->getId()) {
+            return $this->redirectToRoute('app_home');
+        }
+
+        if (!$friendshipRepository->areFriends($user, $friend)) {
+            throw $this->createAccessDeniedException();
+        }
+
+        return $this->render('friend/compare.html.twig', [
+            'friend' => $friend,
+            'comparison' => $collectionCompareService->compare($user, $friend),
         ]);
     }
 

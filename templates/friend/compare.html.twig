@@ -1,0 +1,186 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Compare with {{ friend.email }} - GamesConsoles{% endblock %}
+
+{% block body %}
+    <div class="page-header">
+        <h1>Compare collections</h1>
+        <p class="page-subtitle">You and {{ friend.email }} — matched by game/console name.</p>
+    </div>
+
+    <div class="stats compare-stats">
+        <div class="stat">
+            <strong>{{ comparison.overlapGames|length }}</strong>
+            <span>Shared games</span>
+        </div>
+        <div class="stat">
+            <strong>{{ comparison.uniqueMineGames|length }}</strong>
+            <span>Only yours</span>
+        </div>
+        <div class="stat">
+            <strong>{{ comparison.uniqueFriendGames|length }}</strong>
+            <span>Only {{ friend.email|split('@')|first }}</span>
+        </div>
+        <div class="stat">
+            <strong>{{ comparison.overlapConsoles|length }}</strong>
+            <span>Shared consoles</span>
+        </div>
+    </div>
+
+    <h2>Games</h2>
+
+    <h3 class="compare-section-title">In both collections ({{ comparison.overlapGames|length }})</h3>
+    {% if comparison.overlapGames is empty %}
+        <div class="empty-state compare-empty">No shared game titles.</div>
+    {% else %}
+        <div class="panel">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Yours</th>
+                        <th>Theirs</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in comparison.overlapGames %}
+                        <tr>
+                            <td><strong>{{ row.name }}</strong></td>
+                            <td><a href="{{ path('app_game_show', {id: row.mine.id}) }}">View</a></td>
+                            <td><a href="{{ path('app_game_show', {id: row.friend.id}) }}">View</a></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+
+    <h3 class="compare-section-title">Only in your collection ({{ comparison.uniqueMineGames|length }})</h3>
+    {% if comparison.uniqueMineGames is empty %}
+        <div class="empty-state compare-empty">—</div>
+    {% else %}
+        <div class="panel">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for game in comparison.uniqueMineGames %}
+                        <tr>
+                            <td>{{ game.name }}</td>
+                            <td class="actions"><a href="{{ path('app_game_show', {id: game.id}) }}" class="btn btn-ghost">View</a></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+
+    <h3 class="compare-section-title">Only in {{ friend.email }}'s collection ({{ comparison.uniqueFriendGames|length }})</h3>
+    {% if comparison.uniqueFriendGames is empty %}
+        <div class="empty-state compare-empty">—</div>
+    {% else %}
+        <div class="panel">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for game in comparison.uniqueFriendGames %}
+                        <tr>
+                            <td>{{ game.name }}</td>
+                            <td class="actions"><a href="{{ path('app_game_show', {id: game.id}) }}" class="btn btn-ghost">View</a></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+
+    <h2>Consoles</h2>
+
+    <h3 class="compare-section-title">In both collections ({{ comparison.overlapConsoles|length }})</h3>
+    {% if comparison.overlapConsoles is empty %}
+        <div class="empty-state compare-empty">No shared consoles.</div>
+    {% else %}
+        <div class="panel">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Console</th>
+                        <th>Yours</th>
+                        <th>Theirs</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in comparison.overlapConsoles %}
+                        <tr>
+                            <td><strong>{{ row.label }}</strong></td>
+                            <td><a href="{{ path('app_console_show', {id: row.mine.id}) }}">View</a></td>
+                            <td><a href="{{ path('app_console_show', {id: row.friend.id}) }}">View</a></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+
+    <h3 class="compare-section-title">Only in your collection ({{ comparison.uniqueMineConsoles|length }})</h3>
+    {% if comparison.uniqueMineConsoles is empty %}
+        <div class="empty-state compare-empty">—</div>
+    {% else %}
+        <div class="panel">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Console</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for console in comparison.uniqueMineConsoles %}
+                        <tr>
+                            <td><span class="chip">{{ console.brand }}</span> {{ console.name }}</td>
+                            <td class="actions"><a href="{{ path('app_console_show', {id: console.id}) }}" class="btn btn-ghost">View</a></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+
+    <h3 class="compare-section-title">Only in {{ friend.email }}'s collection ({{ comparison.uniqueFriendConsoles|length }})</h3>
+    {% if comparison.uniqueFriendConsoles is empty %}
+        <div class="empty-state compare-empty">—</div>
+    {% else %}
+        <div class="panel">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Console</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for console in comparison.uniqueFriendConsoles %}
+                        <tr>
+                            <td><span class="chip">{{ console.brand }}</span> {{ console.name }}</td>
+                            <td class="actions"><a href="{{ path('app_console_show', {id: console.id}) }}" class="btn btn-ghost">View</a></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+
+    <div class="btn-group">
+        <a href="{{ path('app_friend_show', {id: friend.id}) }}" class="btn btn-secondary">View collection</a>
+        <a href="{{ path('app_friend_index') }}" class="btn btn-ghost">← Back to friends</a>
+    </div>
+{% endblock %}
