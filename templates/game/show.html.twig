@@ -57,5 +57,15 @@
         </div>
     {% endif %}
 
-    <a href="{{ path('app_game_index') }}" class="back-link">← Back to games</a>
+    {% if friend is defined %}
+        {% if pickConsole is defined and pickConsole %}
+            <a href="{{ path('app_friend_pick_console_games', {id: friend.id, consoleId: pickConsole.id}) }}" class="back-link">← Back to {{ pickConsole.name }}</a>
+        {% else %}
+            <a href="{{ path('app_friend_show', {id: friend.id}) }}" class="back-link">← Back to {{ friend.email }}</a>
+        {% endif %}
+    {% elseif pickConsole is defined and pickConsole %}
+        <a href="{{ path('app_console_picker_games', {id: pickConsole.id, brand: pickBrand.id|default(null)}) }}" class="back-link">← Back to {{ pickConsole.name }}</a>
+    {% else %}
+        <a href="{{ path('app_game_index') }}" class="back-link">← Back to games</a>
+    {% endif %}
 {% endblock %}
