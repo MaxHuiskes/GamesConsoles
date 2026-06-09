@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Invite created - GamesConsoles{% endblock %}
+
+{% block body %}
+    <div class="page-header">
+        <h1>Invite created</h1>
+        <p class="page-subtitle">Share this link with the person you want to invite.</p>
+    </div>
+
+    <div class="form-panel">
+        {% if invite.email %}
+            <p class="meta">Restricted to: <strong>{{ invite.email }}</strong></p>
+        {% endif %}
+        <label>Invite link</label>
+        <input type="text" value="{{ inviteUrl }}" readonly onclick="this.select()">
+        <div class="btn-group" style="margin-top:1rem">
+            <a href="{{ path('app_invite_index') }}" class="btn btn-primary">Back to invites</a>
+        </div>
+    </div>
+{% endblock %}

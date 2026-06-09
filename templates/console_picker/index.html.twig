@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Pick a console - GamesConsoles{% endblock %}
+
+{% block body %}
+    <div class="toolbar">
+        <div class="page-header" style="margin-bottom:0">
+            <h1>Pick a console</h1>
+            <p class="page-subtitle">Choose a system to browse its games.</p>
+        </div>
+        <a href="{{ path('app_console_picker_random') }}" class="btn btn-primary">Random console</a>
+    </div>
+
+    {% if consoles is empty %}
+        <div class="empty-state">No consoles yet. <a href="{{ path('app_console_new') }}">Add a console</a> first.</div>
+    {% else %}
+        <div class="picker-grid">
+            {% for console in consoles %}
+                <a href="{{ path('app_console_picker_games', {id: console.id}) }}" class="picker-card-link">
+                    <article class="picker-item-card">
+                        <span class="chip">{{ console.brand }}</span>
+                        <h2>{{ console.name }}</h2>
+                        <p class="picker-item-count">{{ console.games|length }} game{{ console.games|length != 1 ? 's' : '' }}</p>
+                    </article>
+                </a>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}

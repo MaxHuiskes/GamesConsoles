@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New game - GamesConsoles{% endblock %}
+
+{% block body %}
+    <div class="page-header">
+        <h1>New game</h1>
+    </div>
+    <div class="form-panel">
+        {{ include('game/_form.html.twig') }}
+    </div>
+{% endblock %}

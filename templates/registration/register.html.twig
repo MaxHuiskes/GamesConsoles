@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Register - GamesConsoles{% endblock %}
+
+{% block body %}
+    <div class="page-header">
+        <h1>Register</h1>
+        <p class="page-subtitle">
+            {% if invite %}
+                Invited by {{ invite.invitedBy.email }}
+            {% else %}
+                Create the first account.
+            {% endif %}
+        </p>
+    </div>
+
+    <div class="form-panel">
+        {% for message in app.flashes('error') %}
+            <p style="color: var(--danger); margin-bottom: 1rem;">{{ message }}</p>
+        {% endfor %}
+
+        {{ form_start(form) }}
+            {{ form_row(form.email) }}
+            {{ form_row(form.plainPassword.first) }}
+            {{ form_row(form.plainPassword.second) }}
+            <div class="btn-group">
+                <button type="submit" class="btn btn-primary">Create account</button>
+                <a href="{{ path('app_login') }}" class="btn btn-secondary">Login</a>
+            </div>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

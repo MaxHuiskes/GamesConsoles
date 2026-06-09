@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Consoles - GamesConsoles{% endblock %}
+
+{% block body %}
+    <div class="toolbar">
+        <div class="page-header" style="margin-bottom:0">
+            <h1>Consoles</h1>
+            <p class="page-subtitle">Your systems and their versions.</p>
+        </div>
+        <a href="{{ path('app_console_new') }}" class="btn btn-primary">Add console</a>
+    </div>
+
+    {% if consoles is empty %}
+        <div class="empty-state">No consoles yet. <a href="{{ path('app_console_new') }}">Add your first console</a>.</div>
+    {% else %}
+        <div class="panel">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Brand</th>
+                        <th>Versions</th>
+                        <th>Games</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for console in consoles %}
+                        <tr>
+                            <td><a href="{{ path('app_console_show', {id: console.id}) }}">{{ console.name }}</a></td>
+                            <td><span class="chip">{{ console.brand }}</span></td>
+                            <td>{{ console.versions|length }}</td>
+                            <td>{{ console.games|length }}</td>
+                            <td class="actions">
+                                <a href="{{ path('app_console_edit', {id: console.id}) }}" class="btn btn-ghost">Edit</a>
+                                <form method="post" action="{{ path('app_console_delete', {id: console.id}) }}" onsubmit="return confirm('Delete this console and all its versions/games?');">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ console.id) }}">
+                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+{% endblock %}

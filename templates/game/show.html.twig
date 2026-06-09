@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ game.name }} - GamesConsoles{% endblock %}
+
+{% block body %}
+    <div class="toolbar">
+        <div class="page-header" style="margin-bottom:0">
+            <h1>{{ game.name }}</h1>
+            <p class="page-subtitle">
+                <span class="chip-list">
+                    {% for console in game.consoles %}
+                        <span class="chip">{{ console.brand }} · {{ console }}</span>
+                    {% endfor %}
+                </span>
+            </p>
+        </div>
+        <div class="actions">
+            <a href="{{ path('app_game_version_new', {game: game.id}) }}" class="btn btn-primary">Add version</a>
+            <a href="{{ path('app_game_edit', {id: game.id}) }}" class="btn btn-secondary">Edit</a>
+        </div>
+    </div>
+
+    {% if game.versions is empty %}
+        <div class="empty-state">No versions yet. Add e.g. Physical, Digital, GOTY, PAL.</div>
+    {% else %}
+        <div class="version-grid">
+            {% for version in game.versions %}
+                {% include '_version_card.html.twig' with {
+                    version: version,
+                    image_url: path('app_image_game_version', {id: version.id}),
+                    edit_url: path('app_game_version_edit', {game: game.id, id: version.id}),
+                    delete_url: path('app_game_version_delete', {game: game.id, id: version.id}),
+                } %}
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <a href="{{ path('app_game_index') }}" class="back-link">← Back to games</a>
+{% endblock %}

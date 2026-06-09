@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Invite required - GamesConsoles{% endblock %}
+
+{% block body %}
+    <div class="page-header">
+        <h1>Invite required</h1>
+        <p class="page-subtitle">Registration is only open with an invite from an existing member.</p>
+    </div>
+
+    <div class="empty-state">
+        Ask someone who already has an account to send you an invite link.
+        <br><br>
+        <a href="{{ path('app_login') }}" class="btn btn-primary">Login</a>
+    </div>
+{% endblock %}

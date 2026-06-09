@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Pick a game - GamesConsoles{% endblock %}
+
+{% block body %}
+    <div class="page-header">
+        <h1>Pick a game</h1>
+        <p class="page-subtitle">A random version from your collection.</p>
+    </div>
+
+    {% if version %}
+        <div class="featured-picker">
+            {% if version.hasFoto %}
+                <img src="{{ path('app_image_game_version', {id: version.id}) }}" alt="{{ version.game.name }}">
+            {% endif %}
+            <span class="chip">{{ version.condition }}</span>
+            <h2>{{ version.game.name }}</h2>
+            <p class="meta">
+                {{ version.name }}<br>
+                {% for console in version.game.consoles %}
+                    {{ console.brand }} · {{ console }}{% if not loop.last %}<br>{% endif %}
+                {% endfor %}
+            </p>
+            <a href="{{ path('app_picker') }}" class="btn btn-primary">Pick again</a>
+        </div>
+    {% else %}
+        <div class="empty-state">
+            No game versions yet. <a href="{{ path('app_game_new') }}">Add a game</a> and register a version.
+        </div>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,16 @@
+{{ form_start(form) }}
+    {{ form_row(form.name) }}
+    {{ form_row(form.condition) }}
+    <div class="form-group prijs-field">
+        {{ form_label(form.prijs) }}
+        <div class="prijs-input-wrap">
+            {{ form_widget(form.prijs) }}
+            <button type="button" class="btn-prijs-toggle-form" aria-label="Toon prijs">Toon</button>
+        </div>
+        {{ form_errors(form.prijs) }}
+    </div>
+    {{ form_row(form.fotoFile) }}
+    <div class="btn-group">
+        <button type="submit" class="btn btn-primary">Save</button>
+    </div>
+{{ form_end(form) }}

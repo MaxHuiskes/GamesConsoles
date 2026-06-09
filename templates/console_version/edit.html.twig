@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit version - {{ console.name }}{% endblock %}
+
+{% block body %}
+    <div class="page-header">
+        <h1>Edit version</h1>
+        <p class="page-subtitle">{{ version.name }} · {{ console.name }}</p>
+    </div>
+    <div class="form-panel">
+        {% if version.hasFoto %}
+            <img class="thumb" style="width:100%;max-width:280px;border-radius:14px;margin-bottom:1rem" src="{{ path('app_image_console_version', {id: version.id}) }}" alt="">
+        {% endif %}
+        {{ include('console_version/_form.html.twig') }}
+        <a href="{{ path('app_console_show', {id: console.id}) }}" class="back-link">← Cancel</a>
+    </div>
+{% endblock %}

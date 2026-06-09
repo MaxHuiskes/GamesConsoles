@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>{% block title %}GamesConsoles{% endblock %}</title>
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>🎮</text></svg>">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+        {% block stylesheets %}{% endblock %}
+        {% block javascripts %}{% endblock %}
+    </head>
+    <body>
+        <header class="site-header">
+            <div class="layout nav-inner">
+                <a href="{{ path('app_home') }}" class="nav-brand"><span>🎮</span> GamesConsoles</a>
+                {% if app.user %}
+                    <nav class="nav-links">
+                        <a href="{{ path('app_brand_index') }}">Brands</a>
+                        <a href="{{ path('app_console_index') }}">Consoles</a>
+                        <a href="{{ path('app_game_index') }}">Games</a>
+                        <a href="{{ path('app_console_picker') }}">Pick console</a>
+                        <a href="{{ path('app_picker') }}">Pick game</a>
+                        <a href="{{ path('app_invite_index') }}">Invites</a>
+                    </nav>
+                    <div class="nav-user">
+                        <span>{{ app.user.userIdentifier }}</span>
+                        <a href="{{ path('app_logout') }}" class="btn btn-ghost">Logout</a>
+                    </div>
+                {% else %}
+                    <div class="nav-user">
+                        <a href="{{ path('app_login') }}" class="btn btn-primary">Login</a>
+                    </div>
+                {% endif %}
+            </div>
+        </header>
+        <main class="layout main">
+            {% block body %}{% endblock %}
+        </main>
+        <script>
+            document.addEventListener('click', function (e) {
+                const displayBtn = e.target.closest('.btn-prijs-toggle');
+                if (displayBtn) {
+                    const wrap = displayBtn.closest('.prijs-reveal');
+                    const masked = wrap.querySelector('.prijs-masked');
+                    const value = wrap.querySelector('.prijs-value');
+                    const visible = !value.hidden;
+                    value.hidden = visible;
+                    masked.hidden = !visible;
+                    displayBtn.textContent = visible ? 'Toon' : 'Verberg';
+                    return;
+                }
+
+                const formBtn = e.target.closest('.btn-prijs-toggle-form');
+                if (formBtn) {
+                    const input = formBtn.closest('.prijs-input-wrap')?.querySelector('input');
+                    if (!input) return;
+                    const isPassword = input.type === 'password';
+                    input.type = isPassword ? 'text' : 'password';
+                    formBtn.textContent = isPassword ? 'Verberg' : 'Toon';
+                }
+            });
+        </script>
+    </body>
+</html>

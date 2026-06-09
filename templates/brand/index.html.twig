@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Brands - GamesConsoles{% endblock %}
+
+{% block body %}
+    <div class="toolbar">
+        <div class="page-header" style="margin-bottom:0">
+            <h1>Brands</h1>
+            <p class="page-subtitle">Nintendo, Sony, Microsoft and more.</p>
+        </div>
+        <a href="{{ path('app_brand_new') }}" class="btn btn-primary">Add brand</a>
+    </div>
+
+    {% if brands is empty %}
+        <div class="empty-state">No brands yet. <a href="{{ path('app_brand_new') }}">Add Nintendo, Sony, etc.</a></div>
+    {% else %}
+        <div class="panel">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Consoles</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for brand in brands %}
+                        <tr>
+                            <td><strong>{{ brand.name }}</strong></td>
+                            <td>{{ brand.consoles|length }}</td>
+                            <td class="actions">
+                                <a href="{{ path('app_brand_edit', {id: brand.id}) }}" class="btn btn-ghost">Edit</a>
+                                <form method="post" action="{{ path('app_brand_delete', {id: brand.id}) }}" onsubmit="return confirm('Delete this brand and all its consoles/games?');">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ brand.id) }}">
+                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+{% endblock %}

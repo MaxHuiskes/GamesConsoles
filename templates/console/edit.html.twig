@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit console - GamesConsoles{% endblock %}
+
+{% block body %}
+    <div class="page-header">
+        <h1>Edit console</h1>
+    </div>
+    <div class="form-panel">
+        {{ include('console/_form.html.twig') }}
+        <a href="{{ path('app_console_show', {id: console.id}) }}" class="back-link">← Back to {{ console.name }}</a>
+    </div>
+{% endblock %}

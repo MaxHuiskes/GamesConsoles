@@ -1,0 +1,98 @@
+<?php
+
+namespace App\Controller;
+
+use App\Entity\Console;
+use App\Entity\User;
+use App\Form\ConsoleType;
+use App\Repository\ConsoleRepository;
+use App\Security\Voter\CollectionVoter;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
+
+#[Route('/consoles')]
+class ConsoleController extends AbstractController
+{
+    #[Route('', name: 'app_console_index', methods: ['GET'])]
+    public function index(ConsoleRepository $consoleRepository): Response
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+
+        return $this->render('console/index.html.twig', [
+            'consoles' => $consoleRepository->findByOwner($user),
+        ]);
+    }
+
+    #[Route('/new', name: 'app_console_new', methods: ['GET', 'POST'])]
+    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+
+        $console = new Console();
+        $form = $this->createForm(ConsoleType::class, $console, ['owner' => $user]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($console);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_console_show', ['id' => $console->getId()]);
+        }
+
+        return $this->render('console/new.html.twig', [
+            'console' => $console,
+            'form' => $form,
+        ]);
+    }
+
+    #[Route('/{id}', name: 'app_console_show', methods: ['GET'])]
+    public function show(Console $console): Response
+    {
+        $this->denyAccessUnlessGranted(CollectionVoter::VIEW, $console);
+
+        return $this->render('console/show.html.twig', [
+            'console' => $console,
+        ]);
+    }
+
+    #[Route('/{id}/edit', name: 'app_console_edit', methods: ['GET', 'POST'])]
+    public function edit(Request $request, Console $console, EntityManagerInterface $entityManager): Response
+    {
+        $this->denyAccessUnlessGranted(CollectionVoter::EDIT, $console);
+
+        /** @var User $user */
+        $user = $this->getUser();
+
+        $form = $this->createForm(ConsoleType::class, $console, ['owner' => $user]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_console_show', ['id' => $console->getId()]);
+        }
+
+        return $this->render('console/edit.html.twig', [
+            'console' => $console,
+            'form' => $form,
+        ]);
+    }
+
+    #[Route('/{id}/delete', name: 'app_console_delete', methods: ['POST'])]
+    public function delete(Request $request, Console $console, EntityManagerInterface $entityManager): Response
+    {
+        $this->denyAccessUnlessGranted(CollectionVoter::EDIT, $console);
+
+        if ($this->isCsrfTokenValid('delete'.$console->getId(), $request->getPayload()->getString('_token'))) {
+            $entityManager->remove($console);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('app_console_index');
+    }
+}

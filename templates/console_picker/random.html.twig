@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Random console - GamesConsoles{% endblock %}
+
+{% block body %}
+    <div class="page-header">
+        <h1>Random console</h1>
+    </div>
+    <div class="empty-state">
+        No consoles in your collection yet. <a href="{{ path('app_console_new') }}">Add a console</a> first.
+    </div>
+    <a href="{{ path('app_console_picker') }}" class="back-link">← Pick a console manually</a>
+{% endblock %}

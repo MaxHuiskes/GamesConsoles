@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Invites - GamesConsoles{% endblock %}
+
+{% block body %}
+    <div class="toolbar">
+        <div class="page-header" style="margin-bottom:0">
+            <h1>Invites</h1>
+            <p class="page-subtitle">Invite others to join your collection app.</p>
+        </div>
+        <a href="{{ path('app_invite_new') }}" class="btn btn-primary">New invite</a>
+    </div>
+
+    {% if invites is empty %}
+        <div class="empty-state">No invites yet. <a href="{{ path('app_invite_new') }}">Create one</a>.</div>
+    {% else %}
+        <div class="panel">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Created</th>
+                        <th>Email</th>
+                        <th>Status</th>
+                        <th>Link</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for invite in invites %}
+                        <tr>
+                            <td>{{ invite.createdAt|date('Y-m-d H:i') }}</td>
+                            <td>{{ invite.email ?? '—' }}</td>
+                            <td>
+                                {% if invite.used %}
+                                    <span class="chip">Used by {{ invite.usedBy.email }}</span>
+                                {% else %}
+                                    <span class="chip">Open</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if not invite.used %}
+                                    <a href="{{ path('app_register_invite', {token: invite.token}) }}">Copy link</a>
+                                {% else %}
+                                    —
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+{% endblock %}

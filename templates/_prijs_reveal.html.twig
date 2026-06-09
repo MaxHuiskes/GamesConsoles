@@ -1,0 +1,9 @@
+{% if value %}
+    <span class="prijs-reveal">
+        <span class="prijs-masked">••••••</span>
+        <span class="prijs-value" hidden>€ {{ value }}</span>
+        <button type="button" class="btn-prijs-toggle">Toon</button>
+    </span>
+{% else %}
+    <span class="muted">—</span>
+{% endif %}

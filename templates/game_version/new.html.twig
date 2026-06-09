@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New version - {{ game.name }}{% endblock %}
+
+{% block body %}
+    <div class="page-header">
+        <h1>New version</h1>
+        <p class="page-subtitle">For {{ game.name }}</p>
+    </div>
+    <div class="form-panel">
+        {{ include('game_version/_form.html.twig') }}
+        <a href="{{ path('app_game_show', {id: game.id}) }}" class="back-link">← Cancel</a>
+    </div>
+{% endblock %}

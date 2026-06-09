@@ -1,1 +1,64 @@
 # GamesConsoles
+
+## Requirements
+Symfony: latest
+php: 8.3+
+twig: latest
+db: mariadb
+
+## project info
+This is a project to store data on which games and consoles I own from different brands.
+Also a random picker for when I don't know what to play.
+Multiple users can each keep their own collection.
+
+## data structure
+User
+- email
+- password
+
+Brand
+- owner (user)
+- name
+
+Console
+- brand
+- name
+
+ConsoleVersion
+- console
+- name (e.g. Slim, Digital Edition, PAL)
+- condition
+- prijs (hidden field)
+- foto (blob in database)
+
+Game
+- consoles (multiple)
+- name
+
+GameVersion
+- game
+- name (e.g. Physical, Digital, GOTY, PAL)
+- condition
+- prijs (hidden field)
+- foto (blob in database)
+
+## Setup
+
+```bash
+# Run migrations
+php bin/console doctrine:migrations:migrate --no-interaction
+
+# Start dev server
+symfony server:start
+```
+
+Open http://127.0.0.1:8000
+
+## Usage
+1. Register the first account, or register via an invite link from an existing user
+2. Add brands (Nintendo, Sony, etc.)
+3. Add consoles linked to a brand, then add versions per console
+4. Add games and link them to one or more consoles, then add versions per game
+5. Use **Invites** to invite new users
+6. Use **Pick console** to browse games per console, or **Pick random console**
+7. Use **Pick a game** for a random version from your own collection

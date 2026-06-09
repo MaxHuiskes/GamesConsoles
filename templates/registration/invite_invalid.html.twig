@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Invalid invite - GamesConsoles{% endblock %}
+
+{% block body %}
+    <div class="page-header">
+        <h1>Invalid invite</h1>
+        <p class="page-subtitle">This invite link is invalid or has already been used.</p>
+    </div>
+
+    <div class="empty-state">
+        Request a new invite from an existing member.
+        <br><br>
+        <a href="{{ path('app_login') }}" class="btn btn-primary">Login</a>
+    </div>
+{% endblock %}

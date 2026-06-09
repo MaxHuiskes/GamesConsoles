@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ console.name }} - GamesConsoles{% endblock %}
+
+{% block body %}
+    <div class="toolbar">
+        <div class="page-header" style="margin-bottom:0">
+            <h1>{{ console.name }}</h1>
+            <p class="page-subtitle"><span class="chip">{{ console.brand }}</span></p>
+        </div>
+        <div class="actions">
+            <a href="{{ path('app_console_version_new', {console: console.id}) }}" class="btn btn-primary">Add version</a>
+            <a href="{{ path('app_console_edit', {id: console.id}) }}" class="btn btn-secondary">Edit</a>
+        </div>
+    </div>
+
+    {% if console.versions is empty %}
+        <div class="empty-state">No versions yet. Add e.g. Slim, Digital Edition, PAL.</div>
+    {% else %}
+        <div class="version-grid">
+            {% for version in console.versions %}
+                {% include '_version_card.html.twig' with {
+                    version: version,
+                    image_url: path('app_image_console_version', {id: version.id}),
+                    edit_url: path('app_console_version_edit', {console: console.id, id: version.id}),
+                    delete_url: path('app_console_version_delete', {console: console.id, id: version.id}),
+                } %}
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <a href="{{ path('app_console_index') }}" class="back-link">← Back to consoles</a>
+{% endblock %}

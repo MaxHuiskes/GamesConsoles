@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ console.name }} games - GamesConsoles{% endblock %}
+
+{% block body %}
+    <div class="page-header">
+        <h1>{{ console.name }}</h1>
+        <p class="page-subtitle"><span class="chip">{{ console.brand }}</span> · pick a game</p>
+    </div>
+
+    {% if games is empty %}
+        <div class="empty-state">No games linked to this console. <a href="{{ path('app_game_new') }}">Add a game</a>.</div>
+    {% else %}
+        <div class="picker-grid">
+            {% for game in games %}
+                <a href="{{ path('app_game_show', {id: game.id}) }}" class="picker-card-link">
+                    <article class="picker-item-card">
+                        <h2>{{ game.name }}</h2>
+                        <p class="picker-item-count">{{ game.versions|length }} version{{ game.versions|length != 1 ? 's' : '' }}</p>
+                        {% set other_consoles = game.consoles|filter(c => c.id != console.id) %}
+                        {% if other_consoles is not empty %}
+                            <p class="meta">Also on: {{ other_consoles|map(c => c.name)|join(', ') }}</p>
+                        {% endif %}
+                    </article>
+                </a>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <div class="btn-group">
+        <a href="{{ path('app_console_picker_random') }}" class="btn btn-primary">Random console</a>
+        <a href="{{ path('app_console_picker') }}" class="btn btn-secondary">All consoles</a>
+    </div>
+{% endblock %}

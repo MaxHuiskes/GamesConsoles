@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Home - GamesConsoles{% endblock %}
+
+{% block body %}
+    <div class="page-header">
+        <h1>My collection</h1>
+        <p class="page-subtitle">Overview of your games and consoles.</p>
+    </div>
+
+    <div class="stats">
+        <div class="stat">
+            <strong>{{ brandCount }}</strong>
+            <span>Brands</span>
+        </div>
+        <div class="stat">
+            <strong>{{ consoleCount }}</strong>
+            <span>Consoles</span>
+        </div>
+        <div class="stat">
+            <strong>{{ consoleVersionCount }}</strong>
+            <span>Console versions</span>
+        </div>
+        <div class="stat">
+            <strong>{{ gameCount }}</strong>
+            <span>Games</span>
+        </div>
+        <div class="stat">
+            <strong>{{ gameVersionCount }}</strong>
+            <span>Game versions</span>
+        </div>
+    </div>
+
+    <div class="action-grid">
+        <a href="{{ path('app_console_picker') }}" class="action-card">
+            <span class="action-card-icon">🕹️</span>
+            <strong>Pick a console</strong>
+            <span>Browse games per console</span>
+        </a>
+        <a href="{{ path('app_console_picker_random') }}" class="action-card">
+            <span class="action-card-icon">🎲</span>
+            <strong>Random console</strong>
+            <span>Let fate choose your system</span>
+        </a>
+        <a href="{{ path('app_picker') }}" class="action-card">
+            <span class="action-card-icon">🎯</span>
+            <strong>Random game</strong>
+            <span>Pick something to play</span>
+        </a>
+    </div>
+{% endblock %}

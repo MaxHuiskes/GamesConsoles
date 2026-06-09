@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Games - GamesConsoles{% endblock %}
+
+{% block body %}
+    <div class="toolbar">
+        <div class="page-header" style="margin-bottom:0">
+            <h1>Games</h1>
+            <p class="page-subtitle">Titles linked to one or more consoles.</p>
+        </div>
+        <a href="{{ path('app_game_new') }}" class="btn btn-primary">Add game</a>
+    </div>
+
+    {% if games is empty %}
+        <div class="empty-state">No games yet. <a href="{{ path('app_game_new') }}">Add your first game</a>.</div>
+    {% else %}
+        <div class="panel">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Consoles</th>
+                        <th>Versions</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for game in games %}
+                        <tr>
+                            <td><a href="{{ path('app_game_show', {id: game.id}) }}">{{ game.name }}</a></td>
+                            <td>
+                                <div class="chip-list">
+                                    {% for console in game.consoles %}
+                                        <span class="chip">{{ console }} ({{ console.brand }})</span>
+                                    {% endfor %}
+                                </div>
+                            </td>
+                            <td>{{ game.versions|length }}</td>
+                            <td class="actions">
+                                <a href="{{ path('app_game_edit', {id: game.id}) }}" class="btn btn-ghost">Edit</a>
+                                <form method="post" action="{{ path('app_game_delete', {id: game.id}) }}" onsubmit="return confirm('Delete this game and all its versions?');">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ game.id) }}">
+                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+{% endblock %}
