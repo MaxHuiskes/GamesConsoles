@@ -8,6 +8,7 @@ use App\Form\GameType;
 use App\Collection\Condition;
 use App\Model\CollectionListQuery;
 use App\Repository\BrandRepository;
+use App\Repository\ConsoleRepository;
 use App\Repository\ConsoleVersionRepository;
 use App\Repository\GameRepository;
 use App\Repository\TagRepository;
@@ -86,12 +87,30 @@ class GameController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_game_show', methods: ['GET'])]
-    public function show(Game $game): Response
-    {
+    public function show(
+        Game $game,
+        Request $request,
+        ConsoleRepository $consoleRepository,
+        BrandRepository $brandRepository,
+    ): Response {
         $this->denyAccessUnlessGranted(CollectionVoter::VIEW, $game);
+
+        $pickConsole = null;
+        $consoleId = $request->query->getInt('console');
+        if ($consoleId > 0) {
+            $pickConsole = $consoleRepository->find($consoleId);
+        }
+
+        $pickBrand = null;
+        $brandId = $request->query->getInt('brand');
+        if ($brandId > 0) {
+            $pickBrand = $brandRepository->find($brandId);
+        }
 
         return $this->render('game/show.html.twig', [
             'game' => $game,
+            'pickConsole' => $pickConsole,
+            'pickBrand' => $pickBrand,
         ]);
     }
 
