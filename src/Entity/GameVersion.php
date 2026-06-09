@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: GameVersionRepository::class)]
 #[ORM\Table(name: 'game_version')]
-#[ORM\UniqueConstraint(name: 'UNIQ_GAME_VERSION_NAME', fields: ['game', 'name'])]
+#[ORM\UniqueConstraint(name: 'UNIQ_GAME_VERSION_NAME_CONDITION', fields: ['game', 'name', 'condition'])]
 class GameVersion
 {
     #[ORM\Id]

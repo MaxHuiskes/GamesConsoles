@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ConsoleVersionRepository::class)]
 #[ORM\Table(name: 'console_version')]
-#[ORM\UniqueConstraint(name: 'UNIQ_CONSOLE_VERSION_NAME', fields: ['console', 'name'])]
+#[ORM\UniqueConstraint(name: 'UNIQ_CONSOLE_VERSION_NAME_CONDITION', fields: ['console', 'name', 'condition'])]
 class ConsoleVersion
 {
     #[ORM\Id]
