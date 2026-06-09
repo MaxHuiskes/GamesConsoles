@@ -54,16 +54,13 @@ symfony server:start
 
 Open http://127.0.0.1:8000
 
-Set `MAILER_DSN` and `MAILER_FROM` in `.env.local` to send password reset emails (e.g. `smtp://user:pass@smtp.example.com:587`).
-
 ## Usage
 1. Register the first account, or register via an invite link from an existing user
-2. Use **Forgot password?** on the login page to reset via email
-3. Add brands (Nintendo, Sony, etc.)
-4. Add consoles linked to a brand, then add versions per console
-5. Add games and link them to one or more consoles, then add versions per game
-6. Use **Invites** to invite new users
-7. Use **Friends** to copy your connect link; the other person opens it in a new tab while logged in to connect
-8. View a friend's collection read-only from **Friends**
-9. Use **Pick console** to browse games per console, or **Pick random console**
-10. Use **Pick a game** for a random version from your own collection
+2. Add brands (Nintendo, Sony, etc.)
+3. Add consoles linked to a brand, then add versions per console
+4. Add games and link them to one or more consoles, then add versions per game
+5. Use **Invites** to invite new users
+6. Use **Friends** to copy your connect link; the other person opens it in a new tab while logged in to connect
+7. View a friend's collection read-only from **Friends**
+8. Use **Pick console** to browse games per console, or **Pick random console**
+9. Use **Pick a game** for a random version from your own collection

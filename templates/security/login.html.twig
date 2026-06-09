@@ -24,10 +24,7 @@
             </div>
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
             <button type="submit" class="btn btn-primary">Login</button>
-            <p class="meta" style="margin-top:1rem">
-                <a href="{{ path('app_reset_password_request') }}">Forgot password?</a>
-            </p>
-            <p class="meta">Need an account? Ask an existing member for an invite.</p>
+            <p class="meta" style="margin-top:1rem">Need an account? Ask an existing member for an invite.</p>
         </form>
     </div>
 {% endblock %}
