@@ -22,10 +22,7 @@ class GameRepository extends ServiceEntityRepository
     public function findByOwner(User $owner): array
     {
         return $this->createQueryBuilder('g')
-            ->distinct()
-            ->join('g.consoles', 'c')
-            ->join('c.brand', 'b')
-            ->where('b.owner = :owner')
+            ->where('g.owner = :owner')
             ->setParameter('owner', $owner)
             ->orderBy('g.name', 'ASC')
             ->getQuery()
@@ -50,13 +47,6 @@ class GameRepository extends ServiceEntityRepository
 
     public function countByOwner(User $owner): int
     {
-        return (int) $this->createQueryBuilder('g')
-            ->select('COUNT(DISTINCT g.id)')
-            ->join('g.consoles', 'c')
-            ->join('c.brand', 'b')
-            ->where('b.owner = :owner')
-            ->setParameter('owner', $owner)
-            ->getQuery()
-            ->getSingleScalarResult();
+        return $this->count(['owner' => $owner]);
     }
 }

@@ -6,7 +6,7 @@
     <div class="toolbar">
         <div class="page-header" style="margin-bottom:0">
             <h1>Games</h1>
-            <p class="page-subtitle">Titles linked to one or more consoles.</p>
+            <p class="page-subtitle">Your game titles, with optional console links.</p>
         </div>
         <a href="{{ path('app_game_new') }}" class="btn btn-primary">Add game</a>
     </div>
@@ -29,11 +29,15 @@
                         <tr>
                             <td><a href="{{ path('app_game_show', {id: game.id}) }}">{{ game.name }}</a></td>
                             <td>
-                                <div class="chip-list">
-                                    {% for console in game.consoles %}
-                                        <span class="chip">{{ console }} ({{ console.brand }})</span>
-                                    {% endfor %}
-                                </div>
+                                {% if game.consoles is empty %}
+                                    <span class="meta">—</span>
+                                {% else %}
+                                    <div class="chip-list">
+                                        {% for console in game.consoles %}
+                                            <span class="chip">{{ console }} ({{ console.brand }})</span>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
                             </td>
                             <td>{{ game.versions|length }}</td>
                             <td class="actions">

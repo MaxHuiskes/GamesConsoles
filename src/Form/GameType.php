@@ -24,8 +24,10 @@ class GameType extends AbstractType
                 'class' => Console::class,
                 'choice_label' => fn (Console $console) => sprintf('%s (%s)', $console->getName(), $console->getBrand()),
                 'label' => 'Consoles',
+                'required' => false,
                 'multiple' => true,
                 'expanded' => false,
+                'help' => 'Optional. You can link consoles later.',
                 'query_builder' => fn (ConsoleRepository $repo) => $repo->createQueryBuilder('console')
                     ->join('console.brand', 'brand')
                     ->where('brand.owner = :owner')

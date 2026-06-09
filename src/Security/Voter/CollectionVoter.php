@@ -76,22 +76,9 @@ class CollectionVoter extends Voter
         }
 
         if ($subject instanceof Game) {
-            return $this->getOwnerFromConsoles($subject->getConsoles());
+            return $subject->getOwner();
         }
 
-        return $this->getOwnerFromConsoles($subject->getGame()?->getConsoles() ?? []);
-    }
-
-    /** @param iterable<Console> $consoles */
-    private function getOwnerFromConsoles(iterable $consoles): ?User
-    {
-        foreach ($consoles as $console) {
-            $owner = $console->getBrand()?->getOwner();
-            if ($owner !== null) {
-                return $owner;
-            }
-        }
-
-        return null;
+        return $subject->getGame()?->getOwner();
     }
 }

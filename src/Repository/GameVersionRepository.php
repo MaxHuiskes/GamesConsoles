@@ -20,11 +20,9 @@ class GameVersionRepository extends ServiceEntityRepository
     public function countByOwner(User $owner): int
     {
         return (int) $this->createQueryBuilder('v')
-            ->select('COUNT(DISTINCT v.id)')
+            ->select('COUNT(v.id)')
             ->join('v.game', 'g')
-            ->join('g.consoles', 'c')
-            ->join('c.brand', 'b')
-            ->where('b.owner = :owner')
+            ->where('g.owner = :owner')
             ->setParameter('owner', $owner)
             ->getQuery()
             ->getSingleScalarResult();
@@ -41,11 +39,8 @@ class GameVersionRepository extends ServiceEntityRepository
         $offset = random_int(0, $count - 1);
 
         return $this->createQueryBuilder('v')
-            ->distinct()
             ->join('v.game', 'g')
-            ->join('g.consoles', 'c')
-            ->join('c.brand', 'b')
-            ->where('b.owner = :owner')
+            ->where('g.owner = :owner')
             ->setParameter('owner', $owner)
             ->setFirstResult($offset)
             ->setMaxResults(1)

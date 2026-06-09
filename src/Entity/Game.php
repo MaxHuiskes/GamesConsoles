@@ -18,6 +18,10 @@ class Game
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $owner = null;
+
     /** @var Collection<int, Console> */
     #[ORM\ManyToMany(targetEntity: Console::class, inversedBy: 'games')]
     #[ORM\JoinTable(name: 'game_console')]
@@ -46,6 +50,18 @@ class Game
     public function setName(string $name): static
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getOwner(): ?User
+    {
+        return $this->owner;
+    }
+
+    public function setOwner(?User $owner): static
+    {
+        $this->owner = $owner;
 
         return $this;
     }

@@ -32,7 +32,8 @@ ConsoleVersion
 - foto (blob in database)
 
 Game
-- consoles (multiple)
+- owner (user)
+- consoles (multiple, optional)
 - name
 
 GameVersion

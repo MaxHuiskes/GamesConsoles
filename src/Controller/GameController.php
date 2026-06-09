@@ -38,6 +38,7 @@ class GameController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $game->setOwner($user);
             $entityManager->persist($game);
             $entityManager->flush();
 
