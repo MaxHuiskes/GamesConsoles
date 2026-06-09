@@ -1,0 +1,74 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}What can I play? - GamesConsoles{% endblock %}
+
+{% block body %}
+    <div class="page-header">
+        <h1>What can I play?</h1>
+        <p class="page-subtitle">Pick a random version filtered by console and condition.</p>
+    </div>
+
+    <form method="get" action="{{ path('app_playable_picker') }}" class="list-filters playable-picker-filters">
+        <div class="list-filters-fields">
+            <label class="list-filter">
+                <span class="list-filter-label">Console</span>
+                <select name="console">
+                    <option value="">Any console</option>
+                    {% for item in consoles %}
+                        <option value="{{ item.id }}"{% if query.consoleId == item.id %} selected{% endif %}>{{ item.brand }} · {{ item.name }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+
+            <label class="list-filter">
+                <span class="list-filter-label">Condition</span>
+                <select name="condition">
+                    <option value="">Any condition</option>
+                    {% for label, value in condition_choices %}
+                        <option value="{{ value }}"{% if query.condition == value %} selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+        </div>
+
+        <div class="list-filters-actions">
+            <button type="submit" name="pick" value="1" class="btn btn-primary">Pick random</button>
+            {% if picked %}
+                <a href="{{ path('app_playable_picker') }}" class="btn btn-ghost">Clear</a>
+            {% endif %}
+        </div>
+    </form>
+
+    {% if picked %}
+        {% if version %}
+            <p class="meta playable-picker-meta">{{ match_count }} matching version{{ match_count != 1 ? 's' : '' }}{% if console %} on {{ console.name }}{% endif %}</p>
+            <div class="featured-picker">
+                {% if version.hasFoto %}
+                    <img src="{{ path('app_image_game_version', {id: version.id}) }}" alt="{{ version.game.name }}">
+                {% endif %}
+                <span class="chip">{{ version.condition }}</span>
+                <h2>{{ version.game.name }}</h2>
+                <p class="meta">
+                    {{ version.name }}<br>
+                    {% for item in version.game.consoles %}
+                        {{ item.brand }} · {{ item }}{% if not loop.last %}<br>{% endif %}
+                    {% endfor %}
+                </p>
+                {% if version.description|trim is not empty %}
+                    <p class="meta version-description">{{ version.description|trim|nl2br }}</p>
+                {% endif %}
+                <a href="{{ path('app_playable_picker', query.queryParams) }}" class="btn btn-primary">Pick again</a>
+            </div>
+        {% else %}
+            <div class="empty-state">
+                {% if query.hasFilters %}
+                    No versions match your filters. <a href="{{ path('app_playable_picker') }}">Clear filters</a> or <a href="{{ path('app_game_new') }}">add a game</a>.
+                {% else %}
+                    No game versions yet. <a href="{{ path('app_game_new') }}">Add a game</a> and register a version.
+                {% endif %}
+            </div>
+        {% endif %}
+    {% elseif consoles is empty %}
+        <div class="empty-state">No consoles yet. <a href="{{ path('app_console_new') }}">Add a console</a> to filter by system.</div>
+    {% endif %}
+{% endblock %}

@@ -259,6 +259,15 @@ a:hover { color: #9ec0ff; }
     align-items: center;
 }
 
+.playable-picker-filters {
+    max-width: 720px;
+}
+
+.playable-picker-meta {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
 .toolbar .actions,
 .btn-group {
     display: flex;

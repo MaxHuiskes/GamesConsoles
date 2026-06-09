@@ -79,3 +79,4 @@ Open http://127.0.0.1:8000
 7. View a friend's collection read-only from **Friends**
 8. Use **Pick console** to browse games per console, or **Pick random console**
 9. Use **Pick a game** for a random version from your own collection
+10. Use **What can I play?** to pick a random version filtered by console and/or condition
