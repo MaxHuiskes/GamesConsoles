@@ -15,20 +15,20 @@
         "symfony/mime": "7.2.*",
         "symfony/property-access": "7.2.*",
         "symfony/runtime": "7.2.*",
+        "symfony/form": "7.2.*",
         "symfony/security-bundle": "7.2.*",
         "symfony/security-csrf": "7.2.*",
-        "symfony/yaml": "7.2.*"
+        "symfony/twig-bundle": "7.2.*",
+        "symfony/validator": "7.2.*",
+        "symfony/yaml": "7.2.*",
+        "twig/twig": "^2.12|^3.0"
     },
     "require-dev": {
         "doctrine/doctrine-bundle": "^2.18",
         "doctrine/doctrine-migrations-bundle": "^3.7",
         "doctrine/orm": "^3.6",
-        "symfony/form": "7.2.*",
         "symfony/maker-bundle": "*",
-        "symfony/twig-bundle": "7.2.*",
-        "symfony/validator": "7.2.*",
-        "twig/extra-bundle": "^2.12|^3.0",
-        "twig/twig": "^2.12|^3.0"
+        "twig/extra-bundle": "^2.12|^3.0"
     },
     "config": {
         "allow-plugins": {
