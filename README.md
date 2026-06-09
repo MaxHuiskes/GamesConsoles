@@ -80,3 +80,4 @@ Open http://127.0.0.1:8000
 8. Use **Pick a brand** to browse consoles per brand, then games per console
 9. Use **Pick console** to browse games per console, or **Pick random console**
 10. Use **Pick a game** for a random version from your own collection
+11. Use **What can I play?** to pick a random version filtered by console and/or condition
