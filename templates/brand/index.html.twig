@@ -8,7 +8,10 @@
             <h1>Brands</h1>
             <p class="page-subtitle">Nintendo, Sony, Microsoft and more.</p>
         </div>
-        <a href="{{ path('app_brand_new') }}" class="btn btn-primary">Add brand</a>
+        <div class="actions">
+            <a href="{{ path('app_brand_picker') }}" class="btn btn-secondary">Browse by brand</a>
+            <a href="{{ path('app_brand_new') }}" class="btn btn-primary">Add brand</a>
+        </div>
     </div>
 
     {% if brands is empty %}

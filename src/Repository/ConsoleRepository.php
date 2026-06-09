@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Brand;
 use App\Entity\Console;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -23,6 +24,20 @@ class ConsoleRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('c')
             ->join('c.brand', 'b')
             ->where('b.owner = :owner')
+            ->setParameter('owner', $owner)
+            ->orderBy('c.name', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /** @return list<Console> */
+    public function findByBrandForOwner(Brand $brand, User $owner): array
+    {
+        return $this->createQueryBuilder('c')
+            ->join('c.brand', 'b')
+            ->where('b = :brand')
+            ->andWhere('b.owner = :owner')
+            ->setParameter('brand', $brand)
             ->setParameter('owner', $owner)
             ->orderBy('c.name', 'ASC')
             ->getQuery()
