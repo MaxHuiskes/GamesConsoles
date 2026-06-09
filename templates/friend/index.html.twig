@@ -35,6 +35,7 @@
                             <td>{{ friend.email }}</td>
                             <td class="actions">
                                 <a href="{{ path('app_friend_show', {id: friend.id}) }}" class="btn btn-primary">View collection</a>
+                                <a href="{{ path('app_friend_compare', {id: friend.id}) }}" class="btn btn-ghost">Compare</a>
                             </td>
                         </tr>
                     {% endfor %}
