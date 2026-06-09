@@ -19,16 +19,19 @@ User
 Brand
 - owner (user)
 - name
+- createdAt
 
 Console
 - brand
 - name
+- createdAt
 
 ConsoleVersion
 - console
 - name (e.g. Slim, Digital Edition, PAL)
 - condition
 - description (optional)
+- createdAt
 - prijs (hidden field)
 - foto (blob in database)
 
@@ -37,12 +40,14 @@ Game
 - consoles (multiple, optional)
 - console versions (multiple, optional)
 - name
+- createdAt
 
 GameVersion
 - game
 - name (e.g. Physical, Digital, GOTY, PAL)
 - condition
 - description (optional)
+- createdAt
 - prijs (hidden field)
 - foto (blob in database)
 

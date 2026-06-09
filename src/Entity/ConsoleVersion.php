@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Trait\CreatedAtTrait;
 use App\Repository\ConsoleVersionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -13,6 +14,8 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\UniqueConstraint(name: 'UNIQ_CONSOLE_VERSION_NAME_CONDITION', fields: ['console', 'name', 'condition'])]
 class ConsoleVersion
 {
+    use CreatedAtTrait;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -44,6 +47,7 @@ class ConsoleVersion
     public function __construct()
     {
         $this->games = new ArrayCollection();
+        $this->initCreatedAt();
     }
 
     public function getId(): ?int
