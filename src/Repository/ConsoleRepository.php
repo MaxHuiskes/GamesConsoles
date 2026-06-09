@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Brand;
 use App\Entity\Console;
 use App\Entity\User;
 use App\Model\CollectionListQuery;
@@ -37,6 +38,20 @@ class ConsoleRepository extends ServiceEntityRepository
         $this->applySort($qb, 'c', $query, 'sort_cv');
 
         return $qb->getQuery()->getResult();
+    }
+
+    /** @return list<Console> */
+    public function findByBrandForOwner(Brand $brand, User $owner): array
+    {
+        return $this->createQueryBuilder('c')
+            ->join('c.brand', 'b')
+            ->where('b = :brand')
+            ->andWhere('b.owner = :owner')
+            ->setParameter('brand', $brand)
+            ->setParameter('owner', $owner)
+            ->orderBy('c.name', 'ASC')
+            ->getQuery()
+            ->getResult();
     }
 
     public function countByOwner(User $owner): int

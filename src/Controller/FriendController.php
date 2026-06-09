@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\Console;
+use App\Entity\Game;
 use App\Entity\User;
 use App\Repository\BrandRepository;
 use App\Repository\ConsoleRepository;
@@ -10,8 +12,11 @@ use App\Repository\FriendshipRepository;
 use App\Repository\GameRepository;
 use App\Repository\GameVersionRepository;
 use App\Service\CollectionCompareService;
+use App\Security\Voter\CollectionVoter;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -19,6 +24,16 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 #[Route('/friends')]
 class FriendController extends AbstractController
 {
+    private function assertFriendAccess(User $user, User $friend, FriendshipRepository $friendshipRepository): void
+    {
+        if ($friend->getId() === $user->getId()) {
+            throw $this->createAccessDeniedException();
+        }
+
+        if (!$friendshipRepository->areFriends($user, $friend)) {
+            throw $this->createAccessDeniedException();
+        }
+    }
     #[Route('', name: 'app_friend_index', methods: ['GET'])]
     public function index(
         FriendshipRepository $friendshipRepository,
@@ -63,6 +78,56 @@ class FriendController extends AbstractController
         return $this->render('friend/compare.html.twig', [
             'friend' => $friend,
             'comparison' => $collectionCompareService->compare($user, $friend),
+    #[Route('/{id}/pick-console/{consoleId}', name: 'app_friend_pick_console_games', methods: ['GET'])]
+    public function pickConsoleGames(
+        User $friend,
+        #[MapEntity(mapping: ['consoleId' => 'id'])] Console $console,
+        FriendshipRepository $friendshipRepository,
+        GameRepository $gameRepository,
+    ): Response {
+        /** @var User $user */
+        $user = $this->getUser();
+        $this->assertFriendAccess($user, $friend, $friendshipRepository);
+        $this->denyAccessUnlessGranted(CollectionVoter::VIEW, $console);
+
+        if ($console->getBrand()?->getOwner()?->getId() !== $friend->getId()) {
+            throw $this->createNotFoundException();
+        }
+
+        return $this->render('friend/pick_console_games.html.twig', [
+            'friend' => $friend,
+            'console' => $console,
+            'games' => $gameRepository->findByConsoleForOwner($console, $friend),
+        ]);
+    }
+
+    #[Route('/{id}/games/{gameId}', name: 'app_friend_game_show', methods: ['GET'])]
+    public function showGame(
+        User $friend,
+        #[MapEntity(mapping: ['gameId' => 'id'])] Game $game,
+        Request $request,
+        FriendshipRepository $friendshipRepository,
+        ConsoleRepository $consoleRepository,
+    ): Response {
+        /** @var User $user */
+        $user = $this->getUser();
+        $this->assertFriendAccess($user, $friend, $friendshipRepository);
+        $this->denyAccessUnlessGranted(CollectionVoter::VIEW, $game);
+
+        if ($game->getOwner()?->getId() !== $friend->getId()) {
+            throw $this->createNotFoundException();
+        }
+
+        $pickConsole = null;
+        $consoleId = $request->query->getInt('console');
+        if ($consoleId > 0) {
+            $pickConsole = $consoleRepository->find($consoleId);
+        }
+
+        return $this->render('game/show.html.twig', [
+            'game' => $game,
+            'friend' => $friend,
+            'pickConsole' => $pickConsole,
         ]);
     }
 
@@ -78,14 +143,7 @@ class FriendController extends AbstractController
     ): Response {
         /** @var User $user */
         $user = $this->getUser();
-
-        if ($friend->getId() === $user->getId()) {
-            return $this->redirectToRoute('app_home');
-        }
-
-        if (!$friendshipRepository->areFriends($user, $friend)) {
-            throw $this->createAccessDeniedException();
-        }
+        $this->assertFriendAccess($user, $friend, $friendshipRepository);
 
         return $this->render('friend/show.html.twig', [
             'friend' => $friend,
@@ -95,7 +153,6 @@ class FriendController extends AbstractController
             'gameCount' => $gameRepository->countByOwner($friend),
             'gameVersionCount' => $gameVersionRepository->countByOwner($friend),
             'consoles' => $consoleRepository->findByOwner($friend),
-            'games' => $gameRepository->findByOwner($friend),
         ]);
     }
 }

@@ -5,7 +5,7 @@
 {% block body %}
     <div class="page-header">
         <h1>{{ friend.email }}</h1>
-        <p class="page-subtitle">Friend's collection (read-only).</p>
+        <p class="page-subtitle">Friend's collection (read-only). Pick a console to browse games.</p>
     </div>
 
     <div class="stats">
@@ -31,79 +31,20 @@
         </div>
     </div>
 
-    <h2>Consoles</h2>
+    <h2>Pick a console</h2>
     {% if consoles is empty %}
         <div class="empty-state">No consoles.</div>
     {% else %}
-        <div class="panel">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Brand</th>
-                        <th>Versions</th>
-                        <th>Games</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for console in consoles %}
-                        <tr>
-                            <td><a href="{{ path('app_console_show', {id: console.id}) }}">{{ console.name }}</a></td>
-                            <td><span class="chip">{{ console.brand }}</span></td>
-                            <td>{{ console.versions|length }}</td>
-                            <td>{{ console.games|length }}</td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    {% endif %}
-
-    <h2>Games</h2>
-    {% if games is empty %}
-        <div class="empty-state">No games.</div>
-    {% else %}
-        <div class="panel">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Consoles</th>
-                        <th>Console versions</th>
-                        <th>Versions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for game in games %}
-                        <tr>
-                            <td><a href="{{ path('app_game_show', {id: game.id}) }}">{{ game.name }}</a></td>
-                            <td>
-                                {% if game.consoles is empty %}
-                                    <span class="meta">—</span>
-                                {% else %}
-                                    <div class="chip-list">
-                                        {% for console in game.consoles %}
-                                            <span class="chip">{{ console }} ({{ console.brand }})</span>
-                                        {% endfor %}
-                                    </div>
-                                {% endif %}
-                            </td>
-                            <td>
-                                {% if game.consoleVersions is empty %}
-                                    <span class="meta">—</span>
-                                {% else %}
-                                    <div class="chip-list">
-                                        {% for consoleVersion in game.consoleVersions %}
-                                            <span class="chip chip-version">{{ consoleVersion.console }} · {{ consoleVersion.name }}</span>
-                                        {% endfor %}
-                                    </div>
-                                {% endif %}
-                            </td>
-                            <td>{{ game.versions|length }}</td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+        <div class="picker-grid">
+            {% for console in consoles %}
+                <a href="{{ path('app_friend_pick_console_games', {id: friend.id, consoleId: console.id}) }}" class="picker-card-link">
+                    <article class="picker-item-card">
+                        <span class="chip">{{ console.brand }}</span>
+                        <h2>{{ console.name }}</h2>
+                        <p class="picker-item-count">{{ console.games|length }} game{{ console.games|length != 1 ? 's' : '' }}</p>
+                    </article>
+                </a>
+            {% endfor %}
         </div>
     {% endif %}
 

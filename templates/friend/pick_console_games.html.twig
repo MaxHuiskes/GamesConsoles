@@ -1,19 +1,21 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ console.name }} games - GamesConsoles{% endblock %}
+{% block title %}{{ console.name }} · {{ friend.email }} - GamesConsoles{% endblock %}
 
 {% block body %}
     <div class="page-header">
         <h1>{{ console.name }}</h1>
-        <p class="page-subtitle"><span class="chip">{{ console.brand }}</span> · pick a game</p>
+        <p class="page-subtitle">
+            <span class="chip">{{ console.brand }}</span> · {{ friend.email }}'s games
+        </p>
     </div>
 
     {% if games is empty %}
-        <div class="empty-state">No games linked to this console. <a href="{{ path('app_game_new') }}">Add a game</a>.</div>
+        <div class="empty-state">No games linked to this console.</div>
     {% else %}
         <div class="picker-grid">
             {% for game in games %}
-                <a href="{{ path('app_game_show', {id: game.id, console: console.id, brand: pickBrand.id|default(null)}) }}" class="picker-card-link">
+                <a href="{{ path('app_friend_game_show', {id: friend.id, gameId: game.id, console: console.id}) }}" class="picker-card-link">
                     <article class="picker-item-card">
                         <h2>{{ game.name }}</h2>
                         <p class="picker-item-count">{{ game.versions|length }} version{{ game.versions|length != 1 ? 's' : '' }}</p>
@@ -27,9 +29,5 @@
         </div>
     {% endif %}
 
-    {% if pickBrand is defined and pickBrand %}
-        <a href="{{ path('app_brand_picker_consoles', {id: pickBrand.id}) }}" class="back-link">← Back to {{ pickBrand.name }}</a>
-    {% else %}
-        <a href="{{ path('app_console_picker') }}" class="back-link">← Back to pick a console</a>
-    {% endif %}
+    <a href="{{ path('app_friend_show', {id: friend.id}) }}" class="back-link">← Back to {{ friend.email }}</a>
 {% endblock %}

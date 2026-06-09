@@ -78,6 +78,7 @@ Open http://127.0.0.1:8000
 6. Use **Invites** to invite new users
 7. Use **Friends** to copy your connect link; the other person opens it in a new tab while logged in to connect
 8. View a friend's collection read-only from **Friends**, or **Compare** to see shared and unique games/consoles
-9. Use **Pick console** to browse games per console, or **Pick random console**
-10. Use **Pick a game** for a random version from your own collection
-11. Use **What can I play?** to pick a random version filtered by console and/or condition
+9. Use **Pick a brand** to browse consoles per brand, then games per console
+10. Use **Pick console** to browse games per console, or **Pick random console**
+11. Use **Pick a game** for a random version from your own collection
+12. Use **What can I play?** to pick a random version filtered by console and/or condition
