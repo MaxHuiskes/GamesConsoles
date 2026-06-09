@@ -27,19 +27,23 @@
                             <a href="{{ path('app_brand_index') }}">Brands</a>
                             <a href="{{ path('app_console_index') }}">Consoles</a>
                             <a href="{{ path('app_game_index') }}">Games</a>
-                        <a href="{{ path('app_tag_index') }}">Tags</a>
-                            <a href="{{ path('app_brand_picker') }}">Pick brand</a>
-                            <a href="{{ path('app_console_picker') }}">Pick console</a>
-                            <a href="{{ path('app_picker') }}">Pick game</a>
-                            <a href="{{ path('app_playable_picker') }}">Playable</a>
+                            <a href="{{ path('app_tag_index') }}">Tags</a>
+                            <details class="nav-dropdown">
+                                <summary>Pick</summary>
+                                <div class="nav-dropdown-menu">
+                                    <a href="{{ path('app_brand_picker') }}">Brand</a>
+                                    <a href="{{ path('app_console_picker') }}">Console</a>
+                                    <a href="{{ path('app_picker') }}">Random game</a>
+                                    <a href="{{ path('app_playable_picker') }}">Playable</a>
+                                </div>
+                            </details>
                             <a href="{{ path('app_invite_index') }}">Invites</a>
                             <a href="{{ path('app_friend_index') }}">Friends</a>
                         </nav>
                         <div class="nav-user">
-                            <span class="nav-email">{{ app.user.userIdentifier }}</span>
-                            <a href="{{ path('app_profile') }}" class="btn btn-ghost">Profile</a>
-                            <a href="{{ path('app_collection') }}" class="btn btn-ghost">Import</a>
-                            <a href="{{ path('app_logout') }}" class="btn btn-ghost">Logout</a>
+                            <a href="{{ path('app_profile') }}">Profile</a>
+                            <a href="{{ path('app_collection') }}">Import</a>
+                            <a href="{{ path('app_logout') }}">Logout</a>
                         </div>
                     {% else %}
                         <div class="nav-user">
@@ -92,7 +96,7 @@
                 });
 
                 window.addEventListener('resize', () => {
-                    if (window.innerWidth > 768) closeMenu();
+                    if (window.innerWidth > 1024) closeMenu();
                 });
             })();
 
