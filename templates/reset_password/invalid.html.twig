@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Invalid reset link - GamesConsoles{% endblock %}
+
+{% block body %}
+    <div class="page-header">
+        <h1>Invalid or expired link</h1>
+        <p class="page-subtitle">This password reset link is no longer valid.</p>
+    </div>
+
+    <div class="form-panel">
+        <a href="{{ path('app_reset_password_request') }}" class="btn btn-primary">Request a new link</a>
+        <a href="{{ path('app_login') }}" class="btn btn-secondary">Back to login</a>
+    </div>
+{% endblock %}
