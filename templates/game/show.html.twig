@@ -14,10 +14,12 @@
                 </span>
             </p>
         </div>
-        <div class="actions">
-            <a href="{{ path('app_game_version_new', {game: game.id}) }}" class="btn btn-primary">Add version</a>
-            <a href="{{ path('app_game_edit', {id: game.id}) }}" class="btn btn-secondary">Edit</a>
-        </div>
+        {% if is_granted('EDIT', game) %}
+            <div class="actions">
+                <a href="{{ path('app_game_version_new', {game: game.id}) }}" class="btn btn-primary">Add version</a>
+                <a href="{{ path('app_game_edit', {id: game.id}) }}" class="btn btn-secondary">Edit</a>
+            </div>
+        {% endif %}
     </div>
 
     {% if game.versions is empty %}
@@ -30,6 +32,7 @@
                     image_url: path('app_image_game_version', {id: version.id}),
                     edit_url: path('app_game_version_edit', {game: game.id, id: version.id}),
                     delete_url: path('app_game_version_delete', {game: game.id, id: version.id}),
+                    readonly: not is_granted('EDIT', game),
                 } %}
             {% endfor %}
         </div>

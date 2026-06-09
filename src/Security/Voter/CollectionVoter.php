@@ -8,6 +8,7 @@ use App\Entity\ConsoleVersion;
 use App\Entity\Game;
 use App\Entity\GameVersion;
 use App\Entity\User;
+use App\Repository\FriendshipRepository;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
@@ -16,6 +17,11 @@ class CollectionVoter extends Voter
 {
     public const VIEW = 'VIEW';
     public const EDIT = 'EDIT';
+
+    public function __construct(
+        private readonly FriendshipRepository $friendshipRepository,
+    ) {
+    }
 
     protected function supports(string $attribute, mixed $subject): bool
     {
@@ -40,7 +46,19 @@ class CollectionVoter extends Voter
 
         $owner = $this->getOwner($subject);
 
-        return $owner?->getId() === $user->getId();
+        if ($owner === null) {
+            return false;
+        }
+
+        if ($owner->getId() === $user->getId()) {
+            return true;
+        }
+
+        if ($attribute === self::VIEW) {
+            return $this->friendshipRepository->areFriends($user, $owner);
+        }
+
+        return false;
     }
 
     private function getOwner(Brand|Console|ConsoleVersion|Game|GameVersion $subject): ?User

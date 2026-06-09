@@ -24,6 +24,7 @@
                         <a href="{{ path('app_console_picker') }}">Pick console</a>
                         <a href="{{ path('app_picker') }}">Pick game</a>
                         <a href="{{ path('app_invite_index') }}">Invites</a>
+                        <a href="{{ path('app_friend_index') }}">Friends</a>
                     </nav>
                     <div class="nav-user">
                         <span>{{ app.user.userIdentifier }}</span>
@@ -37,6 +38,11 @@
             </div>
         </header>
         <main class="layout main">
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="flash flash-{{ label }}">{{ message }}</div>
+                {% endfor %}
+            {% endfor %}
             {% block body %}{% endblock %}
         </main>
         <script>

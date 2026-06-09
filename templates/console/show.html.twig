@@ -8,10 +8,12 @@
             <h1>{{ console.name }}</h1>
             <p class="page-subtitle"><span class="chip">{{ console.brand }}</span></p>
         </div>
-        <div class="actions">
-            <a href="{{ path('app_console_version_new', {console: console.id}) }}" class="btn btn-primary">Add version</a>
-            <a href="{{ path('app_console_edit', {id: console.id}) }}" class="btn btn-secondary">Edit</a>
-        </div>
+        {% if is_granted('EDIT', console) %}
+            <div class="actions">
+                <a href="{{ path('app_console_version_new', {console: console.id}) }}" class="btn btn-primary">Add version</a>
+                <a href="{{ path('app_console_edit', {id: console.id}) }}" class="btn btn-secondary">Edit</a>
+            </div>
+        {% endif %}
     </div>
 
     {% if console.versions is empty %}
@@ -24,6 +26,7 @@
                     image_url: path('app_image_console_version', {id: version.id}),
                     edit_url: path('app_console_version_edit', {console: console.id, id: version.id}),
                     delete_url: path('app_console_version_delete', {console: console.id, id: version.id}),
+                    readonly: not is_granted('EDIT', console),
                 } %}
             {% endfor %}
         </div>

@@ -29,6 +29,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
+    #[ORM\Column(length: 64, unique: true, nullable: true)]
+    private ?string $connectToken = null;
+
     /** @var Collection<int, Brand> */
     #[ORM\OneToMany(targetEntity: Brand::class, mappedBy: 'owner', orphanRemoval: true)]
     private Collection $brands;
@@ -91,6 +94,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function eraseCredentials(): void
     {
+    }
+
+    public function getConnectToken(): ?string
+    {
+        return $this->connectToken;
+    }
+
+    public function ensureConnectToken(): string
+    {
+        if ($this->connectToken === null) {
+            $this->connectToken = bin2hex(random_bytes(32));
+        }
+
+        return $this->connectToken;
     }
 
     /** @return Collection<int, Brand> */

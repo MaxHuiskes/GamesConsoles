@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Friends - GamesConsoles{% endblock %}
+
+{% block body %}
+    <div class="page-header">
+        <h1>Friends</h1>
+        <p class="page-subtitle">Share your link so others can connect and view your collection.</p>
+    </div>
+
+    <div class="panel" style="margin-bottom:1.5rem">
+        <h2 style="margin-top:0">Your connect link</h2>
+        <p>Send this link to someone. They open it in a new tab while logged in — you will both see each other's collections.</p>
+        <div class="connect-link-row">
+            <input type="text" class="connect-link-input" id="connect-url" value="{{ connectUrl }}" readonly>
+            <button type="button" class="btn btn-secondary" id="copy-connect-url">Copy link</button>
+            <a href="{{ connectUrl }}" target="_blank" rel="noopener" class="btn btn-ghost">Open in new tab</a>
+        </div>
+    </div>
+
+    {% if friends is empty %}
+        <div class="empty-state">No friends yet. Share your connect link to get started.</div>
+    {% else %}
+        <div class="panel">
+            <table>
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for friend in friends %}
+                        <tr>
+                            <td>{{ friend.email }}</td>
+                            <td class="actions">
+                                <a href="{{ path('app_friend_show', {id: friend.id}) }}" class="btn btn-primary">View collection</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+
+    <script>
+        document.getElementById('copy-connect-url')?.addEventListener('click', function () {
+            const input = document.getElementById('connect-url');
+            input.select();
+            input.setSelectionRange(0, 99999);
+            navigator.clipboard.writeText(input.value);
+            this.textContent = 'Copied';
+            setTimeout(() => { this.textContent = 'Copy link'; }, 2000);
+        });
+    </script>
+{% endblock %}

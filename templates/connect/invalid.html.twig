@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Invalid link - GamesConsoles{% endblock %}
+
+{% block body %}
+    <div class="page-header">
+        <h1>Invalid connect link</h1>
+        <p class="page-subtitle">This link is not valid or has expired.</p>
+    </div>
+    <a href="{{ path('app_friend_index') }}" class="back-link">← Back to friends</a>
+{% endblock %}
