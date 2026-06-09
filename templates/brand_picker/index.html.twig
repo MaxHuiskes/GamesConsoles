@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Pick a brand - GamesConsoles{% endblock %}
+
+{% block body %}
+    <div class="page-header">
+        <h1>Pick a brand</h1>
+        <p class="page-subtitle">Choose a brand to browse its consoles and games.</p>
+    </div>
+
+    {% if brands is empty %}
+        <div class="empty-state">No brands yet. <a href="{{ path('app_brand_new') }}">Add a brand</a> first.</div>
+    {% else %}
+        <div class="picker-grid">
+            {% for brand in brands %}
+                <a href="{{ path('app_brand_picker_consoles', {id: brand.id}) }}" class="picker-card-link">
+                    <article class="picker-item-card">
+                        <h2>{{ brand.name }}</h2>
+                        <p class="picker-item-count">{{ brand.consoles|length }} console{{ brand.consoles|length != 1 ? 's' : '' }}</p>
+                    </article>
+                </a>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}
