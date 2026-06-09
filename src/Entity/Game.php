@@ -39,6 +39,7 @@ class Game
     public function __construct()
     {
         $this->consoles = new ArrayCollection();
+        $this->consoleVersions = new ArrayCollection();
         $this->versions = new ArrayCollection();
     }
 
